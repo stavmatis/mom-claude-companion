@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f4eee3" />
+  <title>Mom Claude Companion</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <style>
+    :root{
+      --bg:#f4eee3; --ink:#211914; --muted:#76685f; --card:#fffaf2; --line:#e4d6c7;
+      --accent:#8f5bff; --accent2:#d89f5b; --danger:#b84d4d; --ok:#3f7d54;
+      --shadow:0 22px 60px rgba(63,42,23,.14); --radius:28px;
+    }
+    *{box-sizing:border-box} body{margin:0;font-family:ui-rounded, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", Segoe UI, sans-serif;background:
+      radial-gradient(circle at 15% -10%,#fff7dc 0 24%,transparent 34%),
+      radial-gradient(circle at 100% 0,#eadfff 0 22%,transparent 35%),var(--bg);color:var(--ink);min-height:100dvh;}
+    button,input,textarea{font:inherit} button{cursor:pointer;border:0} .wrap{max-width:760px;margin:0 auto;padding:18px 16px 110px}
+    .hero{padding:22px 8px 12px}.eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:12px;color:var(--muted);font-weight:800}.hero h1{margin:8px 0 8px;font-size:38px;line-height:1.02;letter-spacing:-.04em}.hero p{margin:0;color:var(--muted);font-size:16px;line-height:1.45}
+    .card{background:rgba(255,250,242,.92);border:1px solid rgba(117,96,76,.18);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin:14px 0;backdrop-filter:blur(16px)}
+    .row{display:grid;grid-template-columns:1fr;gap:12px}.two{grid-template-columns:1fr 1fr}@media(max-width:620px){.two{grid-template-columns:1fr}.hero h1{font-size:34px}}
+    label{display:block;font-weight:800;font-size:13px;margin:2px 0 7px;color:#392c24} input,textarea{width:100%;border:1px solid var(--line);background:#fffdf8;border-radius:18px;padding:13px 14px;color:var(--ink);outline:none} textarea{min-height:92px;resize:vertical} input:focus,textarea:focus{border-color:#b89bff;box-shadow:0 0 0 4px rgba(143,91,255,.12)}
+    .btn{border-radius:18px;padding:13px 16px;background:#2d211b;color:#fff;font-weight:900;box-shadow:0 12px 26px rgba(45,33,27,.18)}.btn.secondary{background:#fff;color:#2d211b;border:1px solid var(--line);box-shadow:none}.btn.purple{background:linear-gradient(135deg,#7b4dff,#b15dff)}.btn.danger{background:#fff0ef;color:var(--danger);border:1px solid #efc5c2;box-shadow:none}.actions{display:flex;gap:10px;flex-wrap:wrap}.pill{display:inline-flex;gap:7px;align-items:center;border:1px solid var(--line);background:#fffaf4;border-radius:999px;padding:8px 11px;color:var(--muted);font-size:13px;font-weight:800}.status{font-size:13px;color:var(--muted);margin-top:10px;min-height:18px}.status.ok{color:var(--ok)}.status.bad{color:var(--danger)}
+    .tabs{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:8px;background:rgba(33,25,20,.88);padding:8px;border-radius:28px;box-shadow:0 18px 48px rgba(0,0,0,.28);backdrop-filter:blur(16px);z-index:20}.tab{color:#fff;background:transparent;border-radius:20px;padding:10px 12px;font-weight:900;font-size:13px}.tab.active{background:#fff;color:#2d211b}.hidden{display:none!important}
+    .lock{position:fixed;inset:0;z-index:50;background:linear-gradient(160deg,#f6ecdc,#efe4ff);display:grid;place-items:center;padding:24px}.lockbox{width:min(440px,100%);background:#fffaf3;border:1px solid rgba(117,96,76,.18);border-radius:34px;padding:24px;box-shadow:var(--shadow);text-align:center}.pin{font-size:32px;letter-spacing:.34em;text-align:center;font-weight:900}.small{font-size:13px;color:var(--muted);line-height:1.45}.memory-item{border:1px solid var(--line);border-radius:20px;padding:12px;margin:10px 0;background:#fffdf8}.memory-item b{display:block;margin-bottom:4px}.promptbox{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.45;max-height:260px;overflow:auto;background:#201914;color:#fff8ed;border-radius:18px;padding:14px}.topline{display:flex;justify-content:space-between;align-items:center;gap:10px}.logo{width:46px;height:46px;border-radius:18px;background:linear-gradient(135deg,#2d211b,#8f5bff);display:grid;place-items:center;color:#fff;font-weight:1000}.toast{position:fixed;left:50%;top:14px;transform:translateX(-50%);background:#201914;color:white;border-radius:999px;padding:10px 14px;box-shadow:0 16px 40px rgba(0,0,0,.18);z-index:80;font-weight:800;font-size:14px}.empty{padding:20px;border:1px dashed var(--line);border-radius:20px;color:var(--muted);text-align:center}
+  </style>
+</head>
+<body>
+  <div id="toast" class="toast hidden"></div>
+  <section id="lock" class="lock">
+    <div class="lockbox">
+      <div class="logo" style="margin:0 auto 14px">M</div>
+      <h1 style="margin:0 0 8px;letter-spacing:-.04em">Mom Companion</h1>
+      <p class="small">Private phone memory for Claude. Unlock with PIN.</p>
+      <input id="pin" class="pin" inputmode="numeric" maxlength="4" autocomplete="one-time-code" placeholder="••••" />
+      <div class="actions" style="justify-content:center;margin-top:14px"><button class="btn purple" id="unlockBtn">Unlock</button></div>
+      <p id="lockStatus" class="status"></p>
+      <p class="small">Data is encrypted on this phone with the PIN. Use Export Backup before changing phones.</p>
+    </div>
+  </section>
+
+  <main class="wrap hidden" id="app">
+    <header class="hero">
+      <div class="topline"><div><div class="eyebrow">Claude-ready personal memory</div><h1>Mom’s little command center</h1></div><div class="logo">M</div></div>
+      <p>Save the important bits once. When she needs help, tap one button to copy a clean prompt and open Claude.</p>
+    </header>
+
+    <section class="card view" data-view="home">
+      <div class="topline"><h2 style="margin:0">Today</h2><span class="pill" id="lastSaved">Not saved yet</span></div>
+      <div class="row two" style="margin-top:14px">
+        <button class="btn purple" id="copyOpenHome">Copy prompt + open Claude</button>
+        <button class="btn secondary" data-goto="memory">Add / edit memory</button>
+      </div>
+      <div class="card" style="box-shadow:none;background:#fffdf8;margin-bottom:0">
+        <b>What Claude gets</b>
+        <p class="small">Profile, health notes, priorities, reminders, questions, and recent memories. Nothing is sent until she taps the Claude button.</p>
+      </div>
+    </section>
+
+    <section class="card view hidden" data-view="profile">
+      <h2 style="margin-top:0">Profile</h2>
+      <div class="row two">
+        <div><label>Name</label><input id="name" placeholder="Mom" /></div>
+        <div><label>Preferred language</label><input id="language" placeholder="Greek / English" /></div>
+      </div>
+      <label>Short background</label><textarea id="background" placeholder="Who she is, where she lives, family context, preferences..."></textarea>
+      <label>Health / practical context</label><textarea id="health" placeholder="Medication, appointments, mobility, sleep, food, things Claude should know..."></textarea>
+      <label>Standing instructions for Claude</label><textarea id="instructions" placeholder="Be warm, practical, simple. Ask one question at a time. Explain steps clearly..."></textarea>
+      <div class="actions"><button class="btn" id="saveProfile">Save profile</button></div><p class="status" id="profileStatus"></p>
+    </section>
+
+    <section class="card view hidden" data-view="memory">
+      <h2 style="margin-top:0">Memory</h2>
+      <label>Memory title</label><input id="memoryTitle" placeholder="e.g. Blood pressure note, travel plan, question for doctor" />
+      <label>Details</label><textarea id="memoryText" placeholder="Write the memory here..."></textarea>
+      <div class="actions"><button class="btn" id="addMemory">Add memory</button><button class="btn secondary" id="clearMemoryForm">Clear</button></div>
+      <div id="memoryList" style="margin-top:16px"></div>
+    </section>
+
+    <section class="card view hidden" data-view="claude">
+      <h2 style="margin-top:0">Send to Claude</h2>
+      <p class="small">Claude does not reliably support URL-prefilled prompts from a normal webpage. This app copies the prompt, then opens Claude. She pastes and sends.</p>
+      <div class="actions"><button class="btn purple" id="copyOpenClaude">Copy prompt + open Claude</button><button class="btn secondary" id="copyOnly">Copy only</button></div>
+      <p class="status" id="claudeStatus"></p>
+      <h3>Prompt preview</h3><div class="promptbox" id="promptPreview"></div>
+    </section>
+
+    <section class="card view hidden" data-view="settings">
+      <h2 style="margin-top:0">Backup & safety</h2>
+      <p class="small">Export creates a JSON backup of the current decrypted data. Import restores it on this phone.</p>
+      <div class="actions"><button class="btn secondary" id="exportData">Export backup</button><label class="btn secondary" for="importFile">Import backup</label><input id="importFile" type="file" accept="application/json,.json" class="hidden" /><button class="btn danger" id="resetApp">Reset phone data</button></div>
+      <p class="status" id="settingsStatus"></p>
+    </section>
+  </main>
+
+  <nav class="tabs hidden" id="tabs">
+    <button class="tab active" data-goto="home">Home</button><button class="tab" data-goto="profile">Profile</button><button class="tab" data-goto="memory">Memory</button><button class="tab" data-goto="claude">Claude</button><button class="tab" data-goto="settings">Backup</button>
+  </nav>
+
+<script>
+const PIN = '0406';
+const STORE = 'mom-companion-vault';
+const SALT = 'mom-companion-static-salt-v1';
+let state = { profile:{ name:'Mom', language:'Greek / English', background:'', health:'', instructions:'Be warm, practical, simple, and explain one step at a time.' }, memories:[], updatedAt:null };
+let key = null;
+const $ = s => document.querySelector(s); const $$ = s => Array.from(document.querySelectorAll(s));
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.remove('hidden'); setTimeout(()=>t.classList.add('hidden'),2200); }
+function enc(s){return new TextEncoder().encode(s)} function dec(b){return new TextDecoder().decode(b)}
+function b64(buf){return btoa(String.fromCharCode(...new Uint8Array(buf)))} function unb64(str){return Uint8Array.from(atob(str), c=>c.charCodeAt(0))}
+async function derive(pin){ const material=await crypto.subtle.importKey('raw',enc(pin),'PBKDF2',false,['deriveKey']); return crypto.subtle.deriveKey({name:'PBKDF2',salt:enc(SALT),iterations:120000,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,['encrypt','decrypt']); }
+async function save(){ state.updatedAt=new Date().toISOString(); const iv=crypto.getRandomValues(new Uint8Array(12)); const data=enc(JSON.stringify(state)); const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,data); localStorage.setItem(STORE,JSON.stringify({iv:b64(iv),ct:b64(ct)})); render(); }
+async function load(){ const raw=localStorage.getItem(STORE); if(!raw){ await save(); return; } const vault=JSON.parse(raw); const data=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(vault.iv)},key,unb64(vault.ct)); state=JSON.parse(dec(data)); }
+async function unlock(){ const pin=$('#pin').value.trim(); if(pin!==PIN){ $('#lockStatus').textContent='Wrong PIN'; $('#lockStatus').className='status bad'; return; } try{ key=await derive(pin); await load(); $('#lock').classList.add('hidden'); $('#app').classList.remove('hidden'); $('#tabs').classList.remove('hidden'); render(); toast('Unlocked'); } catch(e){ $('#lockStatus').textContent='Could not unlock this phone data'; $('#lockStatus').className='status bad'; }}
+function goto(view){ $$('.view').forEach(v=>v.classList.toggle('hidden',v.dataset.view!==view)); $$('.tab').forEach(t=>t.classList.toggle('active',t.dataset.goto===view)); if(view==='claude') renderPrompt(); window.scrollTo({top:0,behavior:'smooth'}); }
+function render(){ const p=state.profile; $('#name').value=p.name||''; $('#language').value=p.language||''; $('#background').value=p.background||''; $('#health').value=p.health||''; $('#instructions').value=p.instructions||''; $('#lastSaved').textContent=state.updatedAt ? 'Saved '+new Date(state.updatedAt).toLocaleString() : 'Not saved yet'; const list=$('#memoryList'); if(!state.memories.length){ list.innerHTML='<div class="empty">No memories yet.</div>'; } else { list.innerHTML=state.memories.map((m,i)=>`<div class="memory-item"><b>${escapeHtml(m.title||'Memory')}</b><div class="small">${escapeHtml(m.text||'')}</div><div class="actions" style="margin-top:10px"><button class="btn danger" onclick="deleteMemory(${i})">Delete</button></div></div>`).join(''); } renderPrompt(); }
+function escapeHtml(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+window.deleteMemory=async i=>{ state.memories.splice(i,1); await save(); toast('Deleted'); };
+function buildPrompt(){ const p=state.profile; const mem=state.memories.map((m,i)=>`${i+1}. ${m.title}\n${m.text}`).join('\n\n') || 'No saved memories yet.'; return `You are helping ${p.name || 'my mom'} in a warm, practical, simple way.\n\nPreferred language: ${p.language || 'Greek / English'}\n\nBackground:\n${p.background || 'Not filled yet.'}\n\nHealth / practical context:\n${p.health || 'Not filled yet.'}\n\nStanding instructions:\n${p.instructions || 'Be warm, practical, simple, and explain one step at a time.'}\n\nCurrent saved memories / notes:\n${mem}\n\nTask for Claude:\nPlease analyze all of this, summarize what matters, point out anything important or risky, and give her the next 3 simple actions. Ask at most one clarifying question if needed.\n\nGenerated: ${new Date().toLocaleString()}`; }
+function renderPrompt(){ const el=$('#promptPreview'); if(el) el.textContent=buildPrompt(); }
+async function copyPrompt(){ const prompt=buildPrompt(); try{ await navigator.clipboard.writeText(prompt); return true; }catch(e){ const ta=document.createElement('textarea'); ta.value=prompt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); return true; }}
+async function copyAndOpen(){ await copyPrompt(); toast('Prompt copied'); $('#claudeStatus').textContent='Prompt copied. Claude is opening — paste it there and send.'; $('#claudeStatus').className='status ok'; window.open('https://claude.ai/new','_blank','noopener'); }
+$('#unlockBtn').onclick=unlock; $('#pin').addEventListener('keydown',e=>{if(e.key==='Enter') unlock();});
+$$('[data-goto]').forEach(b=>b.onclick=()=>goto(b.dataset.goto));
+$('#saveProfile').onclick=async()=>{ state.profile={ name:$('#name').value, language:$('#language').value, background:$('#background').value, health:$('#health').value, instructions:$('#instructions').value }; await save(); $('#profileStatus').textContent='Saved'; $('#profileStatus').className='status ok'; toast('Profile saved'); };
+$('#addMemory').onclick=async()=>{ const title=$('#memoryTitle').value.trim(); const text=$('#memoryText').value.trim(); if(!title && !text){toast('Add a title or detail first'); return;} state.memories.unshift({title:title||'Memory', text, createdAt:new Date().toISOString()}); $('#memoryTitle').value=''; $('#memoryText').value=''; await save(); toast('Memory added'); };
+$('#clearMemoryForm').onclick=()=>{$('#memoryTitle').value='';$('#memoryText').value='';};
+$('#copyOpenClaude').onclick=copyAndOpen; $('#copyOpenHome').onclick=copyAndOpen; $('#copyOnly').onclick=async()=>{await copyPrompt(); $('#claudeStatus').textContent='Prompt copied.'; $('#claudeStatus').className='status ok'; toast('Copied');};
+$('#exportData').onclick=()=>{ const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='mom-companion-backup.json'; a.click(); URL.revokeObjectURL(a.href); };
+$('#importFile').onchange=async e=>{ const f=e.target.files[0]; if(!f) return; state=JSON.parse(await f.text()); await save(); $('#settingsStatus').textContent='Backup imported'; $('#settingsStatus').className='status ok'; toast('Imported'); };
+$('#resetApp').onclick=async()=>{ if(confirm('Reset all saved data on this phone?')){ localStorage.removeItem(STORE); state={ profile:{ name:'Mom', language:'Greek / English', background:'', health:'', instructions:'Be warm, practical, simple, and explain one step at a time.' }, memories:[], updatedAt:null}; await save(); toast('Reset'); }};
+if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js').catch(()=>{}); }
+</script>
+</body>
+</html>
