@@ -3,26 +3,29 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#f4eee3" />
-  <title>Mom Claude Companion</title>
+  <meta name="theme-color" content="#f6efe6" />
+  <title>Mom IQOS Quit Companion</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <style>
     :root{
-      --bg:#f4eee3; --ink:#211914; --muted:#76685f; --card:#fffaf2; --line:#e4d6c7;
-      --accent:#8f5bff; --accent2:#d89f5b; --danger:#b84d4d; --ok:#3f7d54;
-      --shadow:0 22px 60px rgba(63,42,23,.14); --radius:28px;
+      --bg:#f6efe6; --paper:#fffaf3; --paper2:#fffdf8; --ink:#241915; --muted:#74665e;
+      --line:#e6d9ca; --brown:#5c4033; --purple:#7c4dff; --rose:#b84e66; --green:#2f7b58; --amber:#b7791f;
+      --shadow:0 24px 70px rgba(72,45,25,.15); --radius:28px;
     }
-    *{box-sizing:border-box} body{margin:0;font-family:ui-rounded, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", Segoe UI, sans-serif;background:
-      radial-gradient(circle at 15% -10%,#fff7dc 0 24%,transparent 34%),
-      radial-gradient(circle at 100% 0,#eadfff 0 22%,transparent 35%),var(--bg);color:var(--ink);min-height:100dvh;}
-    button,input,textarea{font:inherit} button{cursor:pointer;border:0} .wrap{max-width:760px;margin:0 auto;padding:18px 16px 110px}
-    .hero{padding:22px 8px 12px}.eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:12px;color:var(--muted);font-weight:800}.hero h1{margin:8px 0 8px;font-size:38px;line-height:1.02;letter-spacing:-.04em}.hero p{margin:0;color:var(--muted);font-size:16px;line-height:1.45}
-    .card{background:rgba(255,250,242,.92);border:1px solid rgba(117,96,76,.18);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin:14px 0;backdrop-filter:blur(16px)}
-    .row{display:grid;grid-template-columns:1fr;gap:12px}.two{grid-template-columns:1fr 1fr}@media(max-width:620px){.two{grid-template-columns:1fr}.hero h1{font-size:34px}}
-    label{display:block;font-weight:800;font-size:13px;margin:2px 0 7px;color:#392c24} input,textarea{width:100%;border:1px solid var(--line);background:#fffdf8;border-radius:18px;padding:13px 14px;color:var(--ink);outline:none} textarea{min-height:92px;resize:vertical} input:focus,textarea:focus{border-color:#b89bff;box-shadow:0 0 0 4px rgba(143,91,255,.12)}
-    .btn{border-radius:18px;padding:13px 16px;background:#2d211b;color:#fff;font-weight:900;box-shadow:0 12px 26px rgba(45,33,27,.18)}.btn.secondary{background:#fff;color:#2d211b;border:1px solid var(--line);box-shadow:none}.btn.purple{background:linear-gradient(135deg,#7b4dff,#b15dff)}.btn.danger{background:#fff0ef;color:var(--danger);border:1px solid #efc5c2;box-shadow:none}.actions{display:flex;gap:10px;flex-wrap:wrap}.pill{display:inline-flex;gap:7px;align-items:center;border:1px solid var(--line);background:#fffaf4;border-radius:999px;padding:8px 11px;color:var(--muted);font-size:13px;font-weight:800}.status{font-size:13px;color:var(--muted);margin-top:10px;min-height:18px}.status.ok{color:var(--ok)}.status.bad{color:var(--danger)}
-    .tabs{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:8px;background:rgba(33,25,20,.88);padding:8px;border-radius:28px;box-shadow:0 18px 48px rgba(0,0,0,.28);backdrop-filter:blur(16px);z-index:20}.tab{color:#fff;background:transparent;border-radius:20px;padding:10px 12px;font-weight:900;font-size:13px}.tab.active{background:#fff;color:#2d211b}.hidden{display:none!important}
-    .lock{position:fixed;inset:0;z-index:50;background:linear-gradient(160deg,#f6ecdc,#efe4ff);display:grid;place-items:center;padding:24px}.lockbox{width:min(440px,100%);background:#fffaf3;border:1px solid rgba(117,96,76,.18);border-radius:34px;padding:24px;box-shadow:var(--shadow);text-align:center}.pin{font-size:32px;letter-spacing:.34em;text-align:center;font-weight:900}.small{font-size:13px;color:var(--muted);line-height:1.45}.memory-item{border:1px solid var(--line);border-radius:20px;padding:12px;margin:10px 0;background:#fffdf8}.memory-item b{display:block;margin-bottom:4px}.promptbox{white-space:pre-wrap;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;line-height:1.45;max-height:260px;overflow:auto;background:#201914;color:#fff8ed;border-radius:18px;padding:14px}.topline{display:flex;justify-content:space-between;align-items:center;gap:10px}.logo{width:46px;height:46px;border-radius:18px;background:linear-gradient(135deg,#2d211b,#8f5bff);display:grid;place-items:center;color:#fff;font-weight:1000}.toast{position:fixed;left:50%;top:14px;transform:translateX(-50%);background:#201914;color:white;border-radius:999px;padding:10px 14px;box-shadow:0 16px 40px rgba(0,0,0,.18);z-index:80;font-weight:800;font-size:14px}.empty{padding:20px;border:1px dashed var(--line);border-radius:20px;color:var(--muted);text-align:center}
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;min-height:100dvh;font-family:ui-rounded,Inter,system-ui,-apple-system,BlinkMacSystemFont,"SF Pro Text",Segoe UI,sans-serif;color:var(--ink);background:radial-gradient(circle at 0 -10%,#fff3c9 0 24%,transparent 35%),radial-gradient(circle at 100% 0,#eadfff 0 22%,transparent 38%),linear-gradient(180deg,#f8f0e7,#efe3d7)}
+    button,input,textarea,select{font:inherit} button{cursor:pointer;border:0} .hidden{display:none!important}
+    .wrap{max-width:960px;margin:0 auto;padding:18px 16px 110px} .hero{padding:20px 4px 10px} .eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:12px;color:var(--muted);font-weight:900} h1{margin:8px 0;font-size:42px;line-height:.98;letter-spacing:-.05em} h2{letter-spacing:-.03em} p{line-height:1.5} .sub{color:var(--muted);margin:0;max-width:58ch}
+    .card{background:rgba(255,250,243,.94);border:1px solid rgba(92,64,51,.14);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin:14px 0;backdrop-filter:blur(16px)}
+    .soft{background:#fffdf8;box-shadow:none} .grid{display:grid;gap:12px} .two{grid-template-columns:1fr 1fr} .three{grid-template-columns:repeat(3,1fr)} @media(max-width:720px){.two,.three{grid-template-columns:1fr} h1{font-size:35px} .wrap{padding-left:14px;padding-right:14px}}
+    label{display:block;font-size:13px;font-weight:900;color:#3b2b23;margin:4px 0 7px} input,textarea,select{width:100%;border:1px solid var(--line);background:#fffdf8;border-radius:17px;padding:12px 13px;outline:none;color:var(--ink)} textarea{min-height:94px;resize:vertical} input:focus,textarea:focus,select:focus{border-color:#b89bff;box-shadow:0 0 0 4px rgba(124,77,255,.12)}
+    .btn{border-radius:18px;padding:13px 15px;background:#2d211b;color:white;font-weight:1000;box-shadow:0 13px 28px rgba(45,33,27,.18)} .btn.secondary{background:white;color:#2d211b;border:1px solid var(--line);box-shadow:none} .btn.purple{background:linear-gradient(135deg,#7048ff,#b15dff)} .btn.green{background:linear-gradient(135deg,#2f7b58,#42a773)} .btn.danger{background:#fff1f2;color:#a83b50;border:1px solid #efc4cd;box-shadow:none} .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .pill{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);background:#fffaf4;border-radius:999px;padding:8px 11px;color:var(--muted);font-size:13px;font-weight:900} .pill.dark{background:#2d211b;color:white;border-color:#2d211b} .metric{padding:14px;border:1px solid var(--line);border-radius:22px;background:#fffdf8} .metric b{font-size:28px;letter-spacing:-.04em;display:block} .small{font-size:13px;color:var(--muted);line-height:1.45} .status{font-size:13px;color:var(--muted);margin-top:10px;min-height:18px} .status.ok{color:var(--green)} .status.bad{color:#a83b50}
+    .lock{position:fixed;inset:0;z-index:50;background:linear-gradient(160deg,#f6ecdc,#efe4ff);display:grid;place-items:center;padding:24px} .lockbox{width:min(440px,100%);background:#fffaf3;border:1px solid rgba(117,96,76,.18);border-radius:34px;padding:24px;box-shadow:var(--shadow);text-align:center} .pin{font-size:32px;letter-spacing:.34em;text-align:center;font-weight:1000}
+    .logo{width:48px;height:48px;border-radius:18px;background:linear-gradient(135deg,#2d211b,#7c4dff);display:grid;place-items:center;color:#fff;font-weight:1000} .topline{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+    .tabs{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:7px;background:rgba(33,25,20,.9);padding:8px;border-radius:28px;box-shadow:0 18px 48px rgba(0,0,0,.28);backdrop-filter:blur(16px);z-index:20;max-width:calc(100vw - 16px);overflow:auto} .tab{white-space:nowrap;color:#fff;background:transparent;border-radius:20px;padding:10px 12px;font-weight:1000;font-size:13px} .tab.active{background:#fff;color:#2d211b}
+    .counter{display:flex;gap:8px;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:18px;padding:10px;background:#fffdf8} .counter span{font-weight:900} .step{display:flex;align-items:center;gap:8px} .step button{width:34px;height:34px;border-radius:12px;background:#efe4d7;font-weight:1000;color:#3b2b23} .num{min-width:22px;text-align:center;font-weight:1000}
+    .insight{border-left:4px solid var(--purple);padding:11px 12px;background:#fffdf8;border-radius:16px;margin:10px 0} .log-item{border:1px solid var(--line);background:#fffdf8;border-radius:20px;padding:12px;margin:10px 0} .promptbox{white-space:pre-wrap;font:12px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;max-height:320px;overflow:auto;background:#201914;color:#fff8ed;border-radius:18px;padding:14px} .toast{position:fixed;left:50%;top:14px;transform:translateX(-50%);background:#201914;color:white;border-radius:999px;padding:10px 14px;box-shadow:0 16px 40px rgba(0,0,0,.18);z-index:80;font-weight:900;font-size:14px}
+    .quote{font-family:Georgia,serif;font-size:18px;line-height:1.35;color:#3b2b23} .mini-table{width:100%;border-collapse:separate;border-spacing:0 8px} .mini-table td,.mini-table th{text-align:left;padding:10px;background:#fffdf8;border-top:1px solid var(--line);border-bottom:1px solid var(--line)} .mini-table td:first-child,.mini-table th:first-child{border-left:1px solid var(--line);border-radius:14px 0 0 14px} .mini-table td:last-child,.mini-table th:last-child{border-right:1px solid var(--line);border-radius:0 14px 14px 0}
   </style>
 </head>
 <body>
@@ -30,104 +33,136 @@
   <section id="lock" class="lock">
     <div class="lockbox">
       <div class="logo" style="margin:0 auto 14px">M</div>
-      <h1 style="margin:0 0 8px;letter-spacing:-.04em">Mom Companion</h1>
-      <p class="small">Private phone memory for Claude. Unlock with PIN.</p>
+      <h1 style="font-size:34px;margin:0 0 8px">Mom Quit Companion</h1>
+      <p class="small">Private IQOS quitting tracker, Claude notes, and one-tap prompt builder.</p>
       <input id="pin" class="pin" inputmode="numeric" maxlength="4" autocomplete="one-time-code" placeholder="••••" />
       <div class="actions" style="justify-content:center;margin-top:14px"><button class="btn purple" id="unlockBtn">Unlock</button></div>
       <p id="lockStatus" class="status"></p>
-      <p class="small">Data is encrypted on this phone with the PIN. Use Export Backup before changing phones.</p>
+      <p class="small">Baseline Claude notes are encrypted in this app and open with PIN 0406.</p>
     </div>
   </section>
 
   <main class="wrap hidden" id="app">
     <header class="hero">
-      <div class="topline"><div><div class="eyebrow">Claude-ready personal memory</div><h1>Mom’s little command center</h1></div><div class="logo">M</div></div>
-      <p>Save the important bits once. When she needs help, tap one button to copy a clean prompt and open Claude.</p>
+      <div class="topline"><div><div class="eyebrow">Built from the Claude IQOS chat</div><h1>Mom’s IQOS Quit Companion</h1><p class="sub">A phone-first tracker for counts, triggers, Recigar notes, memory, and a clean Claude handoff prompt.</p></div><div class="logo">IQ</div></div>
     </header>
 
     <section class="card view" data-view="home">
-      <div class="topline"><h2 style="margin:0">Today</h2><span class="pill" id="lastSaved">Not saved yet</span></div>
-      <div class="row two" style="margin-top:14px">
-        <button class="btn purple" id="copyOpenHome">Copy prompt + open Claude</button>
-        <button class="btn secondary" data-goto="memory">Add / edit memory</button>
+      <div class="topline"><h2 style="margin:0">Today</h2><span class="pill dark" id="totalToday">0 today</span></div>
+      <div class="grid three" style="margin-top:14px">
+        <div class="metric"><b id="weekTotal">0</b><span class="small">logged this week</span></div>
+        <div class="metric"><b id="topTrigger">—</b><span class="small">top trigger</span></div>
+        <div class="metric"><b id="quitDateChip">Set date</b><span class="small">cessation date</span></div>
       </div>
-      <div class="card" style="box-shadow:none;background:#fffdf8;margin-bottom:0">
-        <b>What Claude gets</b>
-        <p class="small">Profile, health notes, priorities, reminders, questions, and recent memories. Nothing is sent until she taps the Claude button.</p>
+      <div class="card soft">
+        <div class="quote">“Recigar handles the chemical pull. The series/chilling cue still needs a replacement ritual.”</div>
       </div>
+      <div class="actions"><button class="btn purple" id="copyOpenHome">Copy full Claude prompt + open Claude</button><button class="btn secondary" data-goto="log">Log today</button></div>
     </section>
 
-    <section class="card view hidden" data-view="profile">
-      <h2 style="margin-top:0">Profile</h2>
-      <div class="row two">
-        <div><label>Name</label><input id="name" placeholder="Mom" /></div>
-        <div><label>Preferred language</label><input id="language" placeholder="Greek / English" /></div>
-      </div>
-      <label>Short background</label><textarea id="background" placeholder="Who she is, where she lives, family context, preferences..."></textarea>
-      <label>Health / practical context</label><textarea id="health" placeholder="Medication, appointments, mobility, sleep, food, things Claude should know..."></textarea>
-      <label>Standing instructions for Claude</label><textarea id="instructions" placeholder="Be warm, practical, simple. Ask one question at a time. Explain steps clearly..."></textarea>
-      <div class="actions"><button class="btn" id="saveProfile">Save profile</button></div><p class="status" id="profileStatus"></p>
+    <section class="card view hidden" data-view="log">
+      <h2 style="margin-top:0">Daily IQOS log</h2>
+      <div class="grid two"><div><label>Date</label><input id="logDate" type="date" /></div><div><label>Top trigger note</label><input id="logNoteShort" placeholder="e.g. series, appointment stress, after dinner" /></div></div>
+      <h3>Count by trigger</h3><div id="counters" class="grid two"></div>
+      <div class="grid two" style="margin-top:12px"><div><label>Pushed by feeling</label><input id="feeling" type="number" min="0" value="0" /></div><div><label>Pulled by situation</label><input id="situation" type="number" min="0" value="0" /></div></div>
+      <label>Notes</label><textarea id="logNotes" placeholder="What happened, what helped, what to try next..."></textarea>
+      <div class="actions"><button class="btn green" id="saveLog">Save day</button><button class="btn secondary" id="clearLog">Clear form</button></div><p id="logStatus" class="status"></p><div id="logList"></div>
+    </section>
+
+    <section class="card view hidden" data-view="plan">
+      <h2 style="margin-top:0">Quit plan</h2>
+      <div class="grid two"><div><label>Cessation date</label><input id="quitDate" type="date" /></div><div><label>Preferred language</label><input id="language" /></div></div>
+      <label>Recigar / doctor note</label><textarea id="recigar"></textarea><label>Health context</label><textarea id="context"></textarea><label>Doctor / mood note</label><textarea id="doctorNote"></textarea>
+      <div class="actions"><button class="btn" id="saveProfile">Save plan</button><button class="btn secondary" data-goto="backup">Backup & reset</button></div><p id="planStatus" class="status"></p>
+      <h3>Ritual plan</h3><div id="ritualPlan"></div>
+    </section>
+
+    <section class="card view hidden" data-view="insights">
+      <h2 style="margin-top:0">Claude chat distilled</h2><p class="small">These are the useful conclusions from the shared Claude conversation, not the generic app I built before.</p><div id="insights"></div>
     </section>
 
     <section class="card view hidden" data-view="memory">
-      <h2 style="margin-top:0">Memory</h2>
-      <label>Memory title</label><input id="memoryTitle" placeholder="e.g. Blood pressure note, travel plan, question for doctor" />
-      <label>Details</label><textarea id="memoryText" placeholder="Write the memory here..."></textarea>
-      <div class="actions"><button class="btn" id="addMemory">Add memory</button><button class="btn secondary" id="clearMemoryForm">Clear</button></div>
-      <div id="memoryList" style="margin-top:16px"></div>
+      <h2 style="margin-top:0">Memory</h2><label>Memory title</label><input id="memoryTitle" placeholder="e.g. Cardiologist said..., series trigger..." /><label>Details</label><textarea id="memoryText"></textarea>
+      <div class="actions"><button class="btn" id="addMemory">Add memory</button><button class="btn secondary" id="clearMemoryForm">Clear</button></div><div id="memoryList" style="margin-top:16px"></div>
     </section>
 
-    <section class="card view hidden" data-view="claude">
-      <h2 style="margin-top:0">Send to Claude</h2>
-      <p class="small">Claude does not reliably support URL-prefilled prompts from a normal webpage. This app copies the prompt, then opens Claude. She pastes and sends.</p>
-      <div class="actions"><button class="btn purple" id="copyOpenClaude">Copy prompt + open Claude</button><button class="btn secondary" id="copyOnly">Copy only</button></div>
-      <p class="status" id="claudeStatus"></p>
-      <h3>Prompt preview</h3><div class="promptbox" id="promptPreview"></div>
+    <section class="card view hidden" data-view="summary">
+      <h2 style="margin-top:0">Weekly summary</h2><div id="weeklySummary"></div><h3>Prompt preview</h3><div class="promptbox" id="promptPreview"></div><div class="actions" style="margin-top:12px"><button class="btn purple" id="copyOpenClaude">Copy prompt + open Claude</button><button class="btn secondary" id="copyOnly">Copy only</button></div><p id="claudeStatus" class="status"></p>
     </section>
 
-    <section class="card view hidden" data-view="settings">
-      <h2 style="margin-top:0">Backup & safety</h2>
-      <p class="small">Export creates a JSON backup of the current decrypted data. Import restores it on this phone.</p>
-      <div class="actions"><button class="btn secondary" id="exportData">Export backup</button><label class="btn secondary" for="importFile">Import backup</label><input id="importFile" type="file" accept="application/json,.json" class="hidden" /><button class="btn danger" id="resetApp">Reset phone data</button></div>
-      <p class="status" id="settingsStatus"></p>
+    <section class="card view hidden" data-view="backup">
+      <h2 style="margin-top:0">Backup & safety</h2><p class="small">Exports decrypted app data as JSON. Import restores it on this phone.</p><div class="actions"><button class="btn secondary" id="exportData">Export backup</button><label class="btn secondary" for="importFile">Import backup</label><input id="importFile" type="file" accept="application/json,.json" class="hidden" /><button class="btn danger" id="resetApp">Reset phone data</button></div><p id="settingsStatus" class="status"></p>
     </section>
   </main>
 
   <nav class="tabs hidden" id="tabs">
-    <button class="tab active" data-goto="home">Home</button><button class="tab" data-goto="profile">Profile</button><button class="tab" data-goto="memory">Memory</button><button class="tab" data-goto="claude">Claude</button><button class="tab" data-goto="settings">Backup</button>
+    <button class="tab active" data-goto="home">Home</button><button class="tab" data-goto="log">Log</button><button class="tab" data-goto="plan">Plan</button><button class="tab" data-goto="insights">Tips</button><button class="tab" data-goto="memory">Mem</button><button class="tab" data-goto="summary">Claude</button>
   </nav>
-
 <script>
 const PIN = '0406';
-const STORE = 'mom-companion-vault';
-const SALT = 'mom-companion-static-salt-v1';
-let state = { profile:{ name:'Mom', language:'Greek / English', background:'', health:'', instructions:'Be warm, practical, simple, and explain one step at a time.' }, memories:[], updatedAt:null };
-let key = null;
+const STORE = 'mom-iqos-companion-v2';
+const SEED = {"salt": "bW9tLWlxb3MtY29tcGFuaW9uLXNlZWQtdjI=", "iv": "zKOyNez8Ib9H7z1M", "ct": "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", "iterations": 240000, "hash": "SHA-256"};
+let state = null; let key = null;
 const $ = s => document.querySelector(s); const $$ = s => Array.from(document.querySelectorAll(s));
 function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.remove('hidden'); setTimeout(()=>t.classList.add('hidden'),2200); }
-function enc(s){return new TextEncoder().encode(s)} function dec(b){return new TextDecoder().decode(b)}
-function b64(buf){return btoa(String.fromCharCode(...new Uint8Array(buf)))} function unb64(str){return Uint8Array.from(atob(str), c=>c.charCodeAt(0))}
-async function derive(pin){ const material=await crypto.subtle.importKey('raw',enc(pin),'PBKDF2',false,['deriveKey']); return crypto.subtle.deriveKey({name:'PBKDF2',salt:enc(SALT),iterations:120000,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,['encrypt','decrypt']); }
-async function save(){ state.updatedAt=new Date().toISOString(); const iv=crypto.getRandomValues(new Uint8Array(12)); const data=enc(JSON.stringify(state)); const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,data); localStorage.setItem(STORE,JSON.stringify({iv:b64(iv),ct:b64(ct)})); render(); }
-async function load(){ const raw=localStorage.getItem(STORE); if(!raw){ await save(); return; } const vault=JSON.parse(raw); const data=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(vault.iv)},key,unb64(vault.ct)); state=JSON.parse(dec(data)); }
-async function unlock(){ const pin=$('#pin').value.trim(); if(pin!==PIN){ $('#lockStatus').textContent='Wrong PIN'; $('#lockStatus').className='status bad'; return; } try{ key=await derive(pin); await load(); $('#lock').classList.add('hidden'); $('#app').classList.remove('hidden'); $('#tabs').classList.remove('hidden'); render(); toast('Unlocked'); } catch(e){ $('#lockStatus').textContent='Could not unlock this phone data'; $('#lockStatus').className='status bad'; }}
-function goto(view){ $$('.view').forEach(v=>v.classList.toggle('hidden',v.dataset.view!==view)); $$('.tab').forEach(t=>t.classList.toggle('active',t.dataset.goto===view)); if(view==='claude') renderPrompt(); window.scrollTo({top:0,behavior:'smooth'}); }
-function render(){ const p=state.profile; $('#name').value=p.name||''; $('#language').value=p.language||''; $('#background').value=p.background||''; $('#health').value=p.health||''; $('#instructions').value=p.instructions||''; $('#lastSaved').textContent=state.updatedAt ? 'Saved '+new Date(state.updatedAt).toLocaleString() : 'Not saved yet'; const list=$('#memoryList'); if(!state.memories.length){ list.innerHTML='<div class="empty">No memories yet.</div>'; } else { list.innerHTML=state.memories.map((m,i)=>`<div class="memory-item"><b>${escapeHtml(m.title||'Memory')}</b><div class="small">${escapeHtml(m.text||'')}</div><div class="actions" style="margin-top:10px"><button class="btn danger" onclick="deleteMemory(${i})">Delete</button></div></div>`).join(''); } renderPrompt(); }
-function escapeHtml(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+const enc=s=>new TextEncoder().encode(s), dec=b=>new TextDecoder().decode(b);
+function b64(buf){ return btoa(String.fromCharCode(...new Uint8Array(buf))); }
+function unb64(s){ return Uint8Array.from(atob(s), c=>c.charCodeAt(0)); }
+async function derive(pin, salt=unb64(SEED.salt), iterations=SEED.iterations){ const material=await crypto.subtle.importKey('raw',enc(pin),'PBKDF2',false,['deriveKey']); return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,['encrypt','decrypt']); }
+async function decryptSeed(){ const seedKey=await derive(PIN); const data=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(SEED.iv)}, seedKey, unb64(SEED.ct)); return JSON.parse(dec(data)); }
+async function save(){ state.updatedAt=new Date().toISOString(); const iv=crypto.getRandomValues(new Uint8Array(12)); const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv}, key, enc(JSON.stringify(state))); localStorage.setItem(STORE, JSON.stringify({iv:b64(iv),ct:b64(ct)})); render(); }
+async function load(){ const raw=localStorage.getItem(STORE); if(!raw){ state=await decryptSeed(); await save(); return; } const vault=JSON.parse(raw); const data=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(vault.iv)}, key, unb64(vault.ct)); state=JSON.parse(dec(data)); }
+async function unlock(){ const pin=$('#pin').value.trim(); if(pin!==PIN){ $('#lockStatus').textContent='Wrong PIN'; $('#lockStatus').className='status bad'; return; } try{ key=await derive(pin); await load(); $('#lock').classList.add('hidden'); $('#app').classList.remove('hidden'); $('#tabs').classList.remove('hidden'); setDefaultDate(); render(); toast('Unlocked'); }catch(e){ $('#lockStatus').textContent='Could not unlock app data'; $('#lockStatus').className='status bad'; console.error(e); } }
+function setDefaultDate(){ $('#logDate').value = new Date().toISOString().slice(0,10); }
+function goto(view){ $$('.view').forEach(v=>v.classList.toggle('hidden',v.dataset.view!==view)); $$('.tab').forEach(t=>t.classList.toggle('active',t.dataset.goto===view)); if(view==='summary') renderPrompt(); window.scrollTo({top:0,behavior:'smooth'}); }
+function escapeHtml(s){ return String(s ?? '').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function countTotal(log){ return Object.values(log.counts||{}).reduce((a,b)=>a+(Number(b)||0),0); }
+function topTrigger(logs=state.logs){ const totals={}; logs.forEach(l=>Object.entries(l.counts||{}).forEach(([k,v])=>totals[k]=(totals[k]||0)+(Number(v)||0))); const entries=Object.entries(totals).sort((a,b)=>b[1]-a[1]); return entries[0]&&entries[0][1]>0?entries[0][0]:'—'; }
+function renderCounters(){ const wrap=$('#counters'); wrap.innerHTML=state.categories.map(cat=>`<div class="counter"><span>${escapeHtml(cat)}</span><div class="step"><button data-step="${escapeHtml(cat)}" data-delta="-1">−</button><span class="num" id="num-${cssSafe(cat)}">0</span><button data-step="${escapeHtml(cat)}" data-delta="1">+</button></div></div>`).join(''); $$('[data-step]').forEach(b=>b.onclick=()=>{ const cat=b.dataset.step; const id='#num-'+cssSafe(cat); const n=Math.max(0, Number($(id).textContent||0)+Number(b.dataset.delta)); $(id).textContent=n; }); }
+function cssSafe(s){ return s.replace(/[^a-z0-9]/gi,'_'); }
+function render(){ if(!state) return; const today=$('#logDate')?.value || new Date().toISOString().slice(0,10); const todayLog=state.logs.find(l=>l.date===today); $('#totalToday').textContent=(todayLog?countTotal(todayLog):0)+' today'; $('#weekTotal').textContent=state.logs.reduce((a,l)=>a+countTotal(l),0); $('#topTrigger').textContent=topTrigger(); $('#quitDateChip').textContent=state.profile.quitDate || 'Set date'; $('#quitDate').value=state.profile.quitDate||''; $('#language').value=state.profile.language||''; $('#recigar').value=state.profile.recigar||''; $('#context').value=state.profile.context||''; $('#doctorNote').value=state.profile.doctorNote||''; renderCounters(); renderInsights(); renderRitual(); renderLogs(); renderMemory(); renderWeekly(); renderPrompt(); }
+function renderInsights(){ $('#insights').innerHTML=state.insights.map(i=>`<div class="insight"><b>${escapeHtml(i.title)}</b><div class="small">${escapeHtml(i.text)}</div></div>`).join(''); }
+function renderRitual(){ $('#ritualPlan').innerHTML=state.ritualPlan.map((x,i)=>`<div class="insight"><b>${i+1}.</b> ${escapeHtml(x)}</div>`).join(''); }
+function renderLogs(){ const list=$('#logList'); if(!state.logs.length){ list.innerHTML='<div class="log-item small">No logs yet.</div>'; return; } list.innerHTML=state.logs.slice().sort((a,b)=>b.date.localeCompare(a.date)).map((l,i)=>`<div class="log-item"><div class="topline"><b>${escapeHtml(l.date)} · ${countTotal(l)} sticks</b><button class="btn danger" onclick="deleteLog('${l.date}')">Delete</button></div><div class="small">Top: ${escapeHtml(topTrigger([l]))} · Feeling ${l.feeling||0} · Situation ${l.situation||0}</div><div class="small">${escapeHtml(l.notes||'')}</div></div>`).join(''); }
+window.deleteLog=async date=>{ state.logs=state.logs.filter(l=>l.date!==date); await save(); toast('Deleted'); };
+function renderMemory(){ const list=$('#memoryList'); list.innerHTML=state.memories.length?state.memories.map((m,i)=>`<div class="log-item"><b>${escapeHtml(m.title)}</b><div class="small">${escapeHtml(m.text)}</div><div class="actions" style="margin-top:10px"><button class="btn danger" onclick="deleteMemory(${i})">Delete</button></div></div>`).join(''):'<div class="log-item small">No memory yet.</div>'; }
 window.deleteMemory=async i=>{ state.memories.splice(i,1); await save(); toast('Deleted'); };
-function buildPrompt(){ const p=state.profile; const mem=state.memories.map((m,i)=>`${i+1}. ${m.title}\n${m.text}`).join('\n\n') || 'No saved memories yet.'; return `You are helping ${p.name || 'my mom'} in a warm, practical, simple way.\n\nPreferred language: ${p.language || 'Greek / English'}\n\nBackground:\n${p.background || 'Not filled yet.'}\n\nHealth / practical context:\n${p.health || 'Not filled yet.'}\n\nStanding instructions:\n${p.instructions || 'Be warm, practical, simple, and explain one step at a time.'}\n\nCurrent saved memories / notes:\n${mem}\n\nTask for Claude:\nPlease analyze all of this, summarize what matters, point out anything important or risky, and give her the next 3 simple actions. Ask at most one clarifying question if needed.\n\nGenerated: ${new Date().toLocaleString()}`; }
+function renderWeekly(){ const rows=state.logs.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(l=>`<tr><td>${escapeHtml(l.date)}</td><td>${countTotal(l)}</td><td>${escapeHtml(topTrigger([l]))}</td><td>${l.feeling||0}</td><td>${l.situation||0}</td></tr>`).join(''); $('#weeklySummary').innerHTML=`<table class="mini-table"><thead><tr><th>Date</th><th>Total</th><th>Top trigger</th><th>Feeling</th><th>Situation</th></tr></thead><tbody>${rows || '<tr><td colspan="5">No logs yet.</td></tr>'}</tbody></table>`; }
+function buildPrompt(){ const logs=state.logs.slice().sort((a,b)=>a.date.localeCompare(b.date)); const logText=logs.map(l=>`${l.date} — total ${countTotal(l)}; top trigger ${topTrigger([l])}; feeling-pushed ${l.feeling||0}; situation-pulled ${l.situation||0}; counts ${JSON.stringify(l.counts)}; notes: ${l.notes||''}`).join('\n'); const insights=state.insights.map(i=>`- ${i.title}: ${i.text}`).join('\n'); const memories=state.memories.map(m=>`- ${m.title}: ${m.text}`).join('\n'); return `You are helping my mom quit IQOS/smoking in a warm, practical, non-alarming way. Use Greek or English as useful.
+
+PROFILE / PLAN
+Name: ${state.profile.name||'Mom'}
+Preferred language: ${state.profile.language||'Greek / English'}
+Cessation date: ${state.profile.quitDate||'not set yet'}
+Recigar note: ${state.profile.recigar}
+Health framing: ${state.profile.context}
+Doctor/mood note: ${state.profile.doctorNote}
+
+KEY CLAUDE CHAT INSIGHTS
+${insights}
+
+RITUAL PLAN
+${state.ritualPlan.map(x=>'- '+x).join('\n')}
+
+MEMORY
+${memories || 'No extra memory yet.'}
+
+IQOS LOGS
+${logText || 'No logs yet.'}
+
+Please analyze the pattern, summarize what matters, identify the highest-risk trigger for relapse, and give the next 3 simple actions for tomorrow. Ask at most one clarifying question.`; }
 function renderPrompt(){ const el=$('#promptPreview'); if(el) el.textContent=buildPrompt(); }
-async function copyPrompt(){ const prompt=buildPrompt(); try{ await navigator.clipboard.writeText(prompt); return true; }catch(e){ const ta=document.createElement('textarea'); ta.value=prompt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); return true; }}
-async function copyAndOpen(){ await copyPrompt(); toast('Prompt copied'); $('#claudeStatus').textContent='Prompt copied. Claude is opening — paste it there and send.'; $('#claudeStatus').className='status ok'; window.open('https://claude.ai/new','_blank','noopener'); }
-$('#unlockBtn').onclick=unlock; $('#pin').addEventListener('keydown',e=>{if(e.key==='Enter') unlock();});
-$$('[data-goto]').forEach(b=>b.onclick=()=>goto(b.dataset.goto));
-$('#saveProfile').onclick=async()=>{ state.profile={ name:$('#name').value, language:$('#language').value, background:$('#background').value, health:$('#health').value, instructions:$('#instructions').value }; await save(); $('#profileStatus').textContent='Saved'; $('#profileStatus').className='status ok'; toast('Profile saved'); };
-$('#addMemory').onclick=async()=>{ const title=$('#memoryTitle').value.trim(); const text=$('#memoryText').value.trim(); if(!title && !text){toast('Add a title or detail first'); return;} state.memories.unshift({title:title||'Memory', text, createdAt:new Date().toISOString()}); $('#memoryTitle').value=''; $('#memoryText').value=''; await save(); toast('Memory added'); };
-$('#clearMemoryForm').onclick=()=>{$('#memoryTitle').value='';$('#memoryText').value='';};
-$('#copyOpenClaude').onclick=copyAndOpen; $('#copyOpenHome').onclick=copyAndOpen; $('#copyOnly').onclick=async()=>{await copyPrompt(); $('#claudeStatus').textContent='Prompt copied.'; $('#claudeStatus').className='status ok'; toast('Copied');};
-$('#exportData').onclick=()=>{ const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='mom-companion-backup.json'; a.click(); URL.revokeObjectURL(a.href); };
+async function copyPrompt(){ const prompt=buildPrompt(); try{ await navigator.clipboard.writeText(prompt); }catch(e){ const ta=document.createElement('textarea'); ta.value=prompt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); } }
+async function copyAndOpen(){ await copyPrompt(); $('#claudeStatus').textContent='Prompt copied. Claude is opening — paste and send.'; $('#claudeStatus').className='status ok'; toast('Prompt copied'); window.open('https://claude.ai/new','_blank','noopener'); }
+$('#unlockBtn').onclick=unlock; $('#pin').addEventListener('keydown',e=>{if(e.key==='Enter') unlock();}); $$('[data-goto]').forEach(b=>b.onclick=()=>goto(b.dataset.goto));
+$('#saveProfile').onclick=async()=>{ state.profile.quitDate=$('#quitDate').value; state.profile.language=$('#language').value; state.profile.recigar=$('#recigar').value; state.profile.context=$('#context').value; state.profile.doctorNote=$('#doctorNote').value; await save(); $('#planStatus').textContent='Saved'; $('#planStatus').className='status ok'; toast('Plan saved'); };
+$('#saveLog').onclick=async()=>{ const counts={}; state.categories.forEach(cat=>counts[cat]=Number($('#num-'+cssSafe(cat)).textContent||0)); const date=$('#logDate').value||new Date().toISOString().slice(0,10); const short=$('#logNoteShort').value.trim(); const notes=[$('#logNotes').value.trim(), short?`Top trigger note: ${short}`:''].filter(Boolean).join('\n'); const log={date, counts, feeling:Number($('#feeling').value||0), situation:Number($('#situation').value||0), notes}; state.logs=state.logs.filter(l=>l.date!==date); state.logs.push(log); await save(); $('#logStatus').textContent='Saved'; $('#logStatus').className='status ok'; toast('Day saved'); };
+$('#clearLog').onclick=()=>{ state.categories.forEach(cat=>$('#num-'+cssSafe(cat)).textContent='0'); $('#feeling').value=0; $('#situation').value=0; $('#logNotes').value=''; $('#logNoteShort').value=''; };
+$('#addMemory').onclick=async()=>{ const title=$('#memoryTitle').value.trim(); const text=$('#memoryText').value.trim(); if(!title&&!text) return toast('Add memory first'); state.memories.unshift({title:title||'Memory', text, createdAt:new Date().toISOString()}); $('#memoryTitle').value=''; $('#memoryText').value=''; await save(); toast('Memory added'); };
+$('#clearMemoryForm').onclick=()=>{$('#memoryTitle').value='';$('#memoryText').value='';}; $('#copyOpenClaude').onclick=copyAndOpen; $('#copyOpenHome').onclick=copyAndOpen; $('#copyOnly').onclick=async()=>{await copyPrompt(); $('#claudeStatus').textContent='Prompt copied.'; $('#claudeStatus').className='status ok'; toast('Copied');};
+$('#exportData').onclick=()=>{ const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='mom-iqos-companion-backup.json'; a.click(); URL.revokeObjectURL(a.href); };
 $('#importFile').onchange=async e=>{ const f=e.target.files[0]; if(!f) return; state=JSON.parse(await f.text()); await save(); $('#settingsStatus').textContent='Backup imported'; $('#settingsStatus').className='status ok'; toast('Imported'); };
-$('#resetApp').onclick=async()=>{ if(confirm('Reset all saved data on this phone?')){ localStorage.removeItem(STORE); state={ profile:{ name:'Mom', language:'Greek / English', background:'', health:'', instructions:'Be warm, practical, simple, and explain one step at a time.' }, memories:[], updatedAt:null}; await save(); toast('Reset'); }};
+$('#resetApp').onclick=async()=>{ if(confirm('Reset all saved data on this phone?')){ localStorage.removeItem(STORE); state=await decryptSeed(); await save(); toast('Reset'); } };
 if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js').catch(()=>{}); }
 </script>
 </body>

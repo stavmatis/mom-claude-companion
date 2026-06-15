@@ -1,13 +1,13 @@
 {
-  "name": "Mom Claude Companion",
-  "short_name": "Mom Claude",
-  "start_url": "./index.html",
+  "name": "Mom IQOS Quit Companion",
+  "short_name": "IQOS Quit",
+  "start_url": "./",
   "display": "standalone",
-  "background_color": "#f4eee3",
-  "theme_color": "#f4eee3",
+  "background_color": "#f6efe6",
+  "theme_color": "#f6efe6",
   "icons": [
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%232d211b'/%3E%3Ctext x='256' y='318' text-anchor='middle' font-size='220' font-family='Arial' font-weight='800' fill='%23fff7e8'%3EM%3C/text%3E%3C/svg%3E",
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='120' fill='%232d211b'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' font-size='170' font-family='Arial' fill='white'%3EIQ%3C/text%3E%3C/svg%3E",
       "sizes": "512x512",
       "type": "image/svg+xml"
     }
