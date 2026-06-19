@@ -15,7 +15,7 @@
     .grid{display:grid;gap:12px} .two{grid-template-columns:1fr 1fr} .three{grid-template-columns:repeat(3,1fr)} @media(max-width:640px){.two,.three{grid-template-columns:1fr} h1{font-size:34px}}
     label{display:block;font-size:13px;font-weight:900;color:#3b2b23;margin:4px 0 7px} input,textarea{width:100%;border:1px solid var(--line);background:#fffdf8;border-radius:17px;padding:12px 13px;outline:none;color:var(--ink)} textarea{min-height:84px;resize:vertical} input:focus,textarea:focus{border-color:#b89bff;box-shadow:0 0 0 4px rgba(124,77,255,.12)}
     .btn{border-radius:18px;padding:13px 15px;background:#2d211b;color:white;font-weight:1000;box-shadow:0 13px 28px rgba(45,33,27,.18)} .btn.secondary{background:white;color:#2d211b;border:1px solid var(--line);box-shadow:none} .btn.purple{background:linear-gradient(135deg,#7048ff,#b15dff)} .btn.green{background:linear-gradient(135deg,#2f7b58,#42a773)} .btn.danger{background:#fff1f2;color:var(--red);border:1px solid #efc4cd;box-shadow:none} .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .metric{padding:14px;border:1px solid var(--line);border-radius:22px;background:#fffdf8} .metric b{font-size:28px;letter-spacing:-.04em;display:block} .small{font-size:13px;color:var(--muted);line-height:1.45} .status{font-size:13px;color:var(--muted);margin-top:10px;min-height:18px} .status.ok{color:var(--green)} .status.bad{color:var(--red)}
+    .metric{padding:14px;border:1px solid var(--line);border-radius:22px;background:#fffdf8} .metric b{font-size:28px;letter-spacing:-.04em;display:block} .small{font-size:13px;color:var(--muted);line-height:1.45} .status{font-size:13px;color:var(--muted);margin-top:10px;min-height:18px} .status.ok{color:var(--green)} .status.bad{color:var(--red)} .sync-note{display:flex;gap:8px;align-items:center;margin:8px 0 0;padding:9px 12px;border:1px solid #d7eadf;background:#f1fbf5;color:#246547;border-radius:999px;font-size:13px;font-weight:900}.sync-dot{width:8px;height:8px;border-radius:99px;background:#42a773;box-shadow:0 0 0 5px rgba(66,167,115,.12)}.sync-text{margin-left:auto;color:var(--muted);font-size:12px;font-weight:800}
     .lock{position:fixed;inset:0;z-index:50;background:linear-gradient(160deg,#f6ecdc,#efe4ff);display:grid;place-items:center;padding:24px} .lockbox{width:min(440px,100%);background:#fffaf3;border:1px solid rgba(117,96,76,.18);border-radius:34px;padding:24px;box-shadow:var(--shadow);text-align:center} .pass{font-size:30px;letter-spacing:.25em;text-align:center;font-weight:1000} .logo{width:48px;height:48px;border-radius:18px;background:linear-gradient(135deg,#2d211b,#7c4dff);display:grid;place-items:center;color:white;font-weight:1000} .topline{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
     .counter{display:flex;gap:8px;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:18px;padding:10px;background:#fffdf8} .counter span{font-weight:900} .step{display:flex;align-items:center;gap:8px} .step button{width:36px;height:36px;border-radius:12px;background:#efe4d7;font-weight:1000;color:#3b2b23} .num{min-width:24px;text-align:center;font-weight:1000}
     .log-item{border:1px solid var(--line);background:#fffdf8;border-radius:20px;padding:12px;margin:10px 0} .promptbox{white-space:pre-wrap;font:12px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;max-height:220px;overflow:auto;background:#201914;color:#fff8ed;border-radius:18px;padding:14px} .toast{position:fixed;left:50%;top:14px;transform:translateX(-50%);background:#201914;color:white;border-radius:999px;padding:10px 14px;box-shadow:0 16px 40px rgba(0,0,0,.18);z-index:80;font-weight:900;font-size:14px}
@@ -39,12 +39,16 @@
       <div class="topline"><div><div class="eyebrow">Daily IQOS tracker</div><h1>Dimitra’s log</h1><p class="sub">Count the sticks, spot the trigger, and send a clean summary to Claude when needed.</p></div><div class="logo">D</div></div>
     </header>
 
+    <div class="sync-note" role="status" aria-live="polite"><span class="sync-dot"></span><span>Updated by Stavros: autosave is now ON.</span><span class="sync-text" id="syncStatus">Loading saved logs…</span></div>
+
     <section class="card">
       <div class="grid three">
         <div class="metric"><b id="todayTotal">0</b><span class="small">today</span></div>
         <div class="metric"><b id="weekTotal">0</b><span class="small">logged total</span></div>
         <div class="metric"><b id="topTrigger">—</b><span class="small">top trigger</span></div>
       </div>
+      <div class="actions" style="margin-top:12px"><button class="btn purple" id="copyOpenClaude">Copy summary + open Claude</button><button class="btn secondary" id="copyOnly">Copy only</button></div>
+      <p id="claudeStatus" class="status"></p>
     </section>
 
     <section class="card">
@@ -53,19 +57,7 @@
       <div id="counters" class="grid two" style="margin-top:14px"></div>
       <div class="grid two" style="margin-top:12px"><div><label>Pushed by feeling</label><input id="feeling" type="number" min="0" value="0" /></div><div><label>Pulled by situation</label><input id="situation" type="number" min="0" value="0" /></div></div>
       <label>Notes</label><textarea id="notes" placeholder="What happened? What helped? What should you try next time?"></textarea>
-      <div class="actions"><button class="btn green" id="saveLog">Save day</button><button class="btn secondary" id="clearForm">Clear</button></div><p id="saveStatus" class="status"></p>
-    </section>
-
-    <section class="card soft">
-      <h2>Useful reminders</h2>
-      <div id="insights" class="small"></div>
-    </section>
-
-    <section class="card">
-      <h2>Claude summary</h2>
-      <div class="actions"><button class="btn purple" id="copyOpenClaude">Copy summary + open Claude</button><button class="btn secondary" id="copyOnly">Copy only</button></div>
-      <p id="claudeStatus" class="status"></p>
-      <div class="promptbox" id="promptPreview"></div>
+      <div class="actions"><button class="btn green" id="saveLog">Save day</button><button class="btn secondary" id="clearForm">Clear</button></div><p id="saveStatus" class="status">Autosave saves each change instantly.</p>
     </section>
 
     <section class="card soft">
@@ -76,9 +68,11 @@
     </section>
   </main>
 <script>
-const STORE = 'dimitra-iqos-log-v3';
+const STORE = 'dimitra-iqos-log-v4';
+const API = './api/vault';
 const SEED = {"salt": "ZGltaXRyYS1pcW9zLWxvZy1zZWVkLXYz", "iv": "HFlGlDE3MxBTO1WX", "ct": "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", "iterations": 260000, "hash": "SHA-256"};
-let state = null, key = null, seedState = null;
+let state = null, key = null, seedState = null, clientAuth = '', autosaveTimer = null, lastSavedDraft = '';
+let syncReady = false, applyingRemote = false;
 const $ = s => document.querySelector(s); const $$ = s => Array.from(document.querySelectorAll(s));
 const enc = s => new TextEncoder().encode(s); const dec = b => new TextDecoder().decode(b);
 function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.remove('hidden'); setTimeout(()=>t.classList.add('hidden'),1800); }
@@ -86,18 +80,29 @@ function b64(buf){ return btoa(String.fromCharCode(...new Uint8Array(buf))); }
 function unb64(s){ return Uint8Array.from(atob(s), c=>c.charCodeAt(0)); }
 async function derive(pass, salt=unb64(SEED.salt), iterations=SEED.iterations){ const material=await crypto.subtle.importKey('raw', enc(pass), 'PBKDF2', false, ['deriveKey']); return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations,hash:'SHA-256'}, material, {name:'AES-GCM',length:256}, false, ['encrypt','decrypt']); }
 async function decryptSeed(activeKey){ const data=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(SEED.iv)}, activeKey, unb64(SEED.ct)); return JSON.parse(dec(data)); }
-async function save(){ state.updatedAt = new Date().toISOString(); const iv=crypto.getRandomValues(new Uint8Array(12)); const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv}, key, enc(JSON.stringify(state))); localStorage.setItem(STORE, JSON.stringify({iv:b64(iv),ct:b64(ct)})); render(); }
-async function load(){ const raw=localStorage.getItem(STORE); if(!raw){ state = JSON.parse(JSON.stringify(seedState)); await save(); return; } const vault=JSON.parse(raw); const data=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(vault.iv)}, key, unb64(vault.ct)); state=JSON.parse(dec(data)); migrate(); }
-function migrate(){ if(state.profile) state.profile.name='Dimitra'; }
-async function unlock(){ const pass=$('#passcode').value.trim(); if(!pass) return; try{ key=await derive(pass); seedState=await decryptSeed(key); await load(); $('#lock').classList.add('hidden'); $('#app').classList.remove('hidden'); $('#logDate').value = new Date().toISOString().slice(0,10); render(); }catch(e){ $('#lockStatus').textContent='Wrong passcode'; $('#lockStatus').className='status bad'; } }
+async function passAuth(pass){ const digest=await crypto.subtle.digest('SHA-256', enc(`dimitra-iqos-log-server-v1:${pass}:${SEED.salt}`)); return b64(digest); }
+async function encryptState(){ const iv=crypto.getRandomValues(new Uint8Array(12)); const ct=await crypto.subtle.encrypt({name:'AES-GCM',iv}, key, enc(JSON.stringify(state))); return {iv:b64(iv),ct:b64(ct),updatedAt:state.updatedAt}; }
+async function decryptVault(vault){ const data=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(vault.iv)}, key, unb64(vault.ct)); const parsed=JSON.parse(dec(data)); migrateObject(parsed); return parsed; }
+async function fetchServerVault(){ try{ const r=await fetch(API,{cache:'no-store',headers:{'x-vault-auth':clientAuth}}); if(r.status===404) return null; if(!r.ok) throw new Error('server '+r.status); return await r.json(); }catch(e){ syncReady=false; updateSyncStatus('Saved on this phone. Server will sync when online.'); return null; } }
+async function pushServerVault(vault, reason='manual'){ try{ const r=await fetch(API,{method:'PUT',headers:{'content-type':'application/json','x-vault-auth':clientAuth},body:JSON.stringify({...vault,reason})}); if(!r.ok) throw new Error('server '+r.status); syncReady=true; updateSyncStatus('Autosaved just now'); return true; }catch(e){ syncReady=false; updateSyncStatus('Saved on this phone. Server sync paused.'); return false; } }
+async function save(reason='manual'){ if(!state || !key) return; state.updatedAt = new Date().toISOString(); const vault=await encryptState(); localStorage.setItem(STORE, JSON.stringify(vault)); await pushServerVault(vault, reason); render(); }
+async function load(){ const localRaw=localStorage.getItem(STORE); let localState=null, serverState=null, serverVault=null; if(localRaw){ try{ localState=await decryptVault(JSON.parse(localRaw)); }catch(e){} } serverVault=await fetchServerVault(); if(serverVault){ try{ serverState=await decryptVault(serverVault); syncReady=true; }catch(e){ updateSyncStatus('Could not read server save with this passcode.'); } }
+  if(serverState && (!localState || Date.parse(serverState.updatedAt||0) >= Date.parse(localState.updatedAt||0))){ state=serverState; localStorage.setItem(STORE, JSON.stringify(serverVault)); updateSyncStatus('Loaded saved logs from server'); }
+  else if(localState){ state=localState; migrate(); const vault=await encryptState(); await pushServerVault(vault, 'local-newer'); }
+  else { state = JSON.parse(JSON.stringify(seedState)); migrate(); await save('first-save'); }
+}
+function migrateObject(obj){ if(obj.profile) obj.profile.name='Dimitra'; if(!Array.isArray(obj.logs)) obj.logs=[]; if(!obj.updatedAt) obj.updatedAt=new Date().toISOString(); }
+function migrate(){ migrateObject(state); }
+function updateSyncStatus(msg){ const el=$('#syncStatus'); if(el) el.textContent=msg; }
+async function unlock(){ const pass=$('#passcode').value.trim(); if(!pass) return; try{ key=await derive(pass); clientAuth=await passAuth(pass); seedState=await decryptSeed(key); await load(); $('#lock').classList.add('hidden'); $('#app').classList.remove('hidden'); $('#logDate').value = new Date().toISOString().slice(0,10); render(); bindAutosave(); }catch(e){ $('#lockStatus').textContent='Wrong passcode'; $('#lockStatus').className='status bad'; } }
 function cssSafe(s){ return s.replace(/[^a-z0-9]/gi,'_'); }
 function countTotal(log){ return Object.values(log.counts||{}).reduce((a,b)=>a+(Number(b)||0),0); }
 function topTrigger(logs=state.logs){ const totals={}; logs.forEach(l=>Object.entries(l.counts||{}).forEach(([k,v])=>totals[k]=(totals[k]||0)+(Number(v)||0))); const entries=Object.entries(totals).sort((a,b)=>b[1]-a[1]); return entries[0]&&entries[0][1]>0?entries[0][0]:'—'; }
 function escapeHtml(s){ return String(s ?? '').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
-function renderCounters(){ $('#counters').innerHTML=state.categories.map(cat=>`<div class="counter"><span>${escapeHtml(cat)}</span><div class="step"><button data-step="${escapeHtml(cat)}" data-delta="-1">−</button><span class="num" id="num-${cssSafe(cat)}">0</span><button data-step="${escapeHtml(cat)}" data-delta="1">+</button></div></div>`).join(''); $$('[data-step]').forEach(b=>b.onclick=()=>{ const id='#num-'+cssSafe(b.dataset.step); $(id).textContent=Math.max(0, Number($(id).textContent||0)+Number(b.dataset.delta)); }); }
-function render(){ if(!state) return; renderCounters(); const today=$('#logDate').value || new Date().toISOString().slice(0,10); const todayLog=state.logs.find(l=>l.date===today); $('#todayTotal').textContent=todayLog?countTotal(todayLog):0; $('#weekTotal').textContent=state.logs.reduce((a,l)=>a+countTotal(l),0); $('#topTrigger').textContent=topTrigger(); $('#insights').innerHTML=state.insights.map(x=>`<div class="log-item">${escapeHtml(x)}</div>`).join(''); renderLogs(); renderPrompt(); }
+function renderCounters(){ $('#counters').innerHTML=state.categories.map(cat=>`<div class="counter"><span>${escapeHtml(cat)}</span><div class="step"><button data-step="${escapeHtml(cat)}" data-delta="-1">−</button><span class="num" id="num-${cssSafe(cat)}">0</span><button data-step="${escapeHtml(cat)}" data-delta="1">+</button></div></div>`).join(''); $$('[data-step]').forEach(b=>b.onclick=()=>{ const id='#num-'+cssSafe(b.dataset.step); $(id).textContent=Math.max(0, Number($(id).textContent||0)+Number(b.dataset.delta)); scheduleAutosave('counter'); }); }
+function render(){ if(!state) return; renderCounters(); const today=$('#logDate').value || new Date().toISOString().slice(0,10); const todayLog=state.logs.find(l=>l.date===today); $('#todayTotal').textContent=todayLog?countTotal(todayLog):0; $('#weekTotal').textContent=state.logs.reduce((a,l)=>a+countTotal(l),0); $('#topTrigger').textContent=topTrigger(); renderLogs(); renderPrompt(); }
 function renderLogs(){ const logs=state.logs.slice().sort((a,b)=>b.date.localeCompare(a.date)); $('#logList').innerHTML=logs.length?logs.map(l=>`<div class="log-item"><div class="topline"><b>${escapeHtml(l.date)} · ${countTotal(l)} total</b><button class="btn danger" onclick="deleteLog('${l.date}')">Delete</button></div><div class="small">Top: ${escapeHtml(topTrigger([l]))} · Feeling ${l.feeling||0} · Situation ${l.situation||0}</div><div class="small">${escapeHtml(l.notes||'')}</div></div>`).join(''):'<div class="small">No logs yet.</div>'; }
-window.deleteLog=async date=>{ state.logs=state.logs.filter(l=>l.date!==date); await save(); toast('Deleted'); };
+window.deleteLog=async date=>{ state.logs=state.logs.filter(l=>l.date!==date); await save('delete-log'); toast('Deleted'); };
 function buildPrompt(){ const logs=state.logs.slice().sort((a,b)=>a.date.localeCompare(b.date)); const logText=logs.map(l=>`${l.date} — total ${countTotal(l)}; top trigger ${topTrigger([l])}; feeling-pushed ${l.feeling||0}; situation-pulled ${l.situation||0}; counts ${JSON.stringify(l.counts)}; notes: ${l.notes||''}`).join('\n'); return `You are helping Dimitra quit IQOS/smoking in a warm, practical, non-alarming way.
 
 Language: ${state.profile.language}
@@ -112,16 +117,22 @@ Logs:
 ${logText || 'No logs yet.'}
 
 Please summarize the pattern, identify the highest-risk trigger, and give the next 3 simple actions. Ask at most one clarifying question.`; }
-function renderPrompt(){ $('#promptPreview').textContent=buildPrompt(); }
+function renderPrompt(){ const preview=$('#promptPreview'); if(preview) preview.textContent=buildPrompt(); }
 async function copyPrompt(){ const prompt=buildPrompt(); try{ await navigator.clipboard.writeText(prompt); }catch(e){ const ta=document.createElement('textarea'); ta.value=prompt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); } }
 async function copyAndOpen(){ await copyPrompt(); $('#claudeStatus').textContent='Copied. Claude is opening.'; $('#claudeStatus').className='status ok'; window.open('https://claude.ai/new','_blank','noopener'); }
+
+function currentDraftLog(){ const counts={}; if(!state) return null; state.categories.forEach(cat=>{ const el=$('#num-'+cssSafe(cat)); counts[cat]=Number(el?.textContent||0); }); const date=$('#logDate').value || new Date().toISOString().slice(0,10); const quick=$('#quickNote').value.trim(); const raw=$('#notes').value.trim(); const notes=[raw, quick?`Quick note: ${quick}`:''].filter(Boolean).join('\\n'); return {date, counts, feeling:Number($('#feeling').value||0), situation:Number($('#situation').value||0), notes}; }
+function draftHasContent(log){ return countTotal(log)>0 || log.feeling>0 || log.situation>0 || Boolean(log.notes.trim()); }
+async function autosaveDraft(reason='autosave'){ if(applyingRemote || !state || !key) return; const log=currentDraftLog(); if(!log || !draftHasContent(log)) return; const signature=JSON.stringify(log); if(signature===lastSavedDraft) return; state.logs=state.logs.filter(l=>l.date!==log.date); state.logs.push(log); lastSavedDraft=signature; $('#saveStatus').textContent='Autosaving…'; $('#saveStatus').className='status'; await save(reason); $('#saveStatus').textContent='Autosaved just now'; $('#saveStatus').className='status ok'; }
+function scheduleAutosave(reason='autosave'){ clearTimeout(autosaveTimer); autosaveTimer=setTimeout(()=>autosaveDraft(reason), 450); }
+function bindAutosave(){ ['logDate','quickNote','feeling','situation','notes'].forEach(id=>{ const el=$('#'+id); if(el) el.addEventListener('input',()=>scheduleAutosave(id)); }); }
 $('#unlockBtn').onclick=unlock; $('#passcode').addEventListener('keydown', e=>{ if(e.key==='Enter') unlock(); });
-$('#saveLog').onclick=async()=>{ const counts={}; state.categories.forEach(cat=>counts[cat]=Number($('#num-'+cssSafe(cat)).textContent||0)); const date=$('#logDate').value || new Date().toISOString().slice(0,10); const quick=$('#quickNote').value.trim(); const raw=$('#notes').value.trim(); const notes=[raw, quick?`Quick note: ${quick}`:''].filter(Boolean).join('\n'); const log={date, counts, feeling:Number($('#feeling').value||0), situation:Number($('#situation').value||0), notes}; state.logs=state.logs.filter(l=>l.date!==date); state.logs.push(log); await save(); $('#saveStatus').textContent='Saved'; $('#saveStatus').className='status ok'; toast('Saved'); };
-$('#clearForm').onclick=()=>{ state.categories.forEach(cat=>$('#num-'+cssSafe(cat)).textContent='0'); $('#feeling').value=0; $('#situation').value=0; $('#quickNote').value=''; $('#notes').value=''; };
+$('#saveLog').onclick=async()=>{ await autosaveDraft('button-save'); $('#saveStatus').textContent='Saved'; $('#saveStatus').className='status ok'; toast('Saved'); };
+$('#clearForm').onclick=()=>{ state.categories.forEach(cat=>$('#num-'+cssSafe(cat)).textContent='0'); $('#feeling').value=0; $('#situation').value=0; $('#quickNote').value=''; $('#notes').value=''; $('#saveStatus').textContent='Cleared. Add a number and it will autosave.'; $('#saveStatus').className='status'; };
 $('#copyOpenClaude').onclick=copyAndOpen; $('#copyOnly').onclick=async()=>{ await copyPrompt(); $('#claudeStatus').textContent='Copied.'; $('#claudeStatus').className='status ok'; toast('Copied'); };
 $('#exportData').onclick=()=>{ const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='dimitra-iqos-log-backup.json'; a.click(); URL.revokeObjectURL(a.href); };
-$('#importFile').onchange=async e=>{ const f=e.target.files[0]; if(!f) return; state=JSON.parse(await f.text()); migrate(); await save(); $('#backupStatus').textContent='Imported'; $('#backupStatus').className='status ok'; };
-$('#resetLocal').onclick=async()=>{ if(confirm('Reset saved data on this phone?')){ localStorage.removeItem(STORE); state=JSON.parse(JSON.stringify(seedState)); await save(); $('#backupStatus').textContent='Reset'; $('#backupStatus').className='status ok'; } };
+$('#importFile').onchange=async e=>{ const f=e.target.files[0]; if(!f) return; state=JSON.parse(await f.text()); migrate(); await save('import'); $('#backupStatus').textContent='Imported'; $('#backupStatus').className='status ok'; };
+$('#resetLocal').onclick=async()=>{ if(confirm('Reset saved data on this phone?')){ localStorage.removeItem(STORE); state=JSON.parse(JSON.stringify(seedState)); await save('reset'); $('#backupStatus').textContent='Reset'; $('#backupStatus').className='status ok'; } };
 if('serviceWorker' in navigator){ navigator.serviceWorker.register('./sw.js').catch(()=>{}); }
 </script>
 </body>

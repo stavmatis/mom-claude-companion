@@ -1,0 +1,7 @@
+{
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js && node scripts/check-html.js"
+  },
+  "dependencies": {}
+}
