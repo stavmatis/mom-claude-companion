@@ -9,6 +9,11 @@ const VAULT_PATH = path.join(DATA_DIR, 'vault.json');
 const LOG_PATH = path.join(DATA_DIR, 'autosave-log.jsonl');
 const AUTH_PATH = path.join(DATA_DIR, 'auth.hash');
 const PORT = Number(process.env.PORT || 8877);
+const ALLOWED_ORIGINS = new Set([
+  'https://stavmatis.github.io',
+  'https://dimitra-iqos-log.loca.lt',
+  'http://127.0.0.1:8877'
+]);
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -24,12 +29,26 @@ function ensureDataDir() {
   fs.mkdirSync(DATA_DIR, { recursive: true, mode: 0o700 });
 }
 
-function send(res, status, body, type = 'application/json; charset=utf-8') {
+function corsHeaders(req) {
+  const origin = req.headers.origin;
+  if (origin && ALLOWED_ORIGINS.has(origin)) {
+    return {
+      'access-control-allow-origin': origin,
+      'access-control-allow-methods': 'GET,PUT,OPTIONS',
+      'access-control-allow-headers': 'content-type,x-vault-auth',
+      'vary': 'Origin'
+    };
+  }
+  return {};
+}
+
+function send(req, res, status, body, type = 'application/json; charset=utf-8') {
   const text = typeof body === 'string' ? body : JSON.stringify(body);
   res.writeHead(status, {
     'content-type': type,
     'cache-control': 'no-store',
-    'x-content-type-options': 'nosniff'
+    'x-content-type-options': 'nosniff',
+    ...corsHeaders(req)
   });
   res.end(text);
 }
@@ -111,40 +130,49 @@ const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
 
+    if (req.method === 'OPTIONS') {
+      res.writeHead(204, {
+        'cache-control': 'no-store',
+        ...corsHeaders(req)
+      });
+      return res.end();
+    }
+
     if (url.pathname === '/health') {
-      return send(res, 200, { ok: true, service: 'dimitra-iqos-log', hasSave: fs.existsSync(VAULT_PATH) });
+      return send(req, res, 200, { ok: true, service: 'dimitra-iqos-log', hasSave: fs.existsSync(VAULT_PATH) });
     }
 
     if (url.pathname === '/api/vault' && req.method === 'GET') {
-      if (!checkVaultAuth(req, url.searchParams.get('auth'))) return send(res, 401, { error: 'unauthorized' });
-      if (!fs.existsSync(VAULT_PATH)) return send(res, 404, { error: 'no_save_yet' });
-      res.writeHead(200, { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', 'x-content-type-options': 'nosniff' });
+      if (!checkVaultAuth(req, url.searchParams.get('auth'))) return send(req, res, 401, { error: 'unauthorized' });
+      if (!fs.existsSync(VAULT_PATH)) return send(req, res, 404, { error: 'no_save_yet' });
+      res.writeHead(200, { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', 'x-content-type-options': 'nosniff', ...corsHeaders(req) });
       return fs.createReadStream(VAULT_PATH).pipe(res);
     }
 
     if (url.pathname === '/api/vault' && req.method === 'PUT') {
       const payload = JSON.parse(await readBody(req));
-      if (!checkVaultAuth(req, payload.auth)) return send(res, 401, { error: 'unauthorized' });
-      if (!validVault(payload)) return send(res, 400, { error: 'invalid_vault' });
+      if (!checkVaultAuth(req, payload.auth)) return send(req, res, 401, { error: 'unauthorized' });
+      if (!validVault(payload)) return send(req, res, 400, { error: 'invalid_vault' });
       const saved = saveVault(payload);
-      return send(res, 200, { ok: true, updatedAt: saved.updatedAt });
+      return send(req, res, 200, { ok: true, updatedAt: saved.updatedAt });
     }
 
-    if (url.pathname.startsWith('/api/')) return send(res, 404, { error: 'not_found' });
+    if (url.pathname.startsWith('/api/')) return send(req, res, 404, { error: 'not_found' });
 
-    if (req.method !== 'GET' && req.method !== 'HEAD') return send(res, 405, 'Method not allowed', 'text/plain; charset=utf-8');
+    if (req.method !== 'GET' && req.method !== 'HEAD') return send(req, res, 405, 'Method not allowed', 'text/plain; charset=utf-8');
     const full = staticPath(url.pathname);
-    if (!full || !fs.existsSync(full) || fs.statSync(full).isDirectory()) return send(res, 404, 'Not found', 'text/plain; charset=utf-8');
+    if (!full || !fs.existsSync(full) || fs.statSync(full).isDirectory()) return send(req, res, 404, 'Not found', 'text/plain; charset=utf-8');
     const ext = path.extname(full);
     res.writeHead(200, {
       'content-type': TYPES[ext] || 'application/octet-stream',
       'cache-control': ext === '.html' ? 'no-store' : 'public, max-age=60',
-      'x-content-type-options': 'nosniff'
+      'x-content-type-options': 'nosniff',
+      ...corsHeaders(req)
     });
     if (req.method === 'HEAD') return res.end();
     fs.createReadStream(full).pipe(res);
   } catch (err) {
-    send(res, err.message === 'too_large' ? 413 : 500, { error: err.message === 'too_large' ? 'too_large' : 'server_error' });
+    send(req, res, err.message === 'too_large' ? 413 : 500, { error: err.message === 'too_large' ? 'too_large' : 'server_error' });
   }
 });
 
