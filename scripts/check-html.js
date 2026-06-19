@@ -4,11 +4,15 @@ const path = require('path');
 const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
 const mustContain = [
   'Updated by Stavros: autosave is now ON.',
-  'https://dimitra-iqos-log.loca.lt/api/vault',
+  'https://dimitra-iqos-save.loca.lt/api/vault',
   'function scheduleAutosave',
   'fetchServerVault',
   'pushServerVault',
-  'Autosave saves each change instantly.'
+  'Autosave saves each change instantly.',
+  'Undo last change',
+  'function clampNumber',
+  'window.adjustLogTotal',
+  'window.undoLastChange'
 ];
 
 const missing = mustContain.filter(s => !html.includes(s));

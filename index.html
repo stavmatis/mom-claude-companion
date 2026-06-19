@@ -17,8 +17,8 @@
     .btn{border-radius:18px;padding:13px 15px;background:#2d211b;color:white;font-weight:1000;box-shadow:0 13px 28px rgba(45,33,27,.18)} .btn.secondary{background:white;color:#2d211b;border:1px solid var(--line);box-shadow:none} .btn.purple{background:linear-gradient(135deg,#7048ff,#b15dff)} .btn.green{background:linear-gradient(135deg,#2f7b58,#42a773)} .btn.danger{background:#fff1f2;color:var(--red);border:1px solid #efc4cd;box-shadow:none} .actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .metric{padding:14px;border:1px solid var(--line);border-radius:22px;background:#fffdf8} .metric b{font-size:28px;letter-spacing:-.04em;display:block} .small{font-size:13px;color:var(--muted);line-height:1.45} .status{font-size:13px;color:var(--muted);margin-top:10px;min-height:18px} .status.ok{color:var(--green)} .status.bad{color:var(--red)} .sync-note{display:flex;gap:8px;align-items:center;margin:8px 0 0;padding:9px 12px;border:1px solid #d7eadf;background:#f1fbf5;color:#246547;border-radius:999px;font-size:13px;font-weight:900}.sync-dot{width:8px;height:8px;border-radius:99px;background:#42a773;box-shadow:0 0 0 5px rgba(66,167,115,.12)}.sync-text{margin-left:auto;color:var(--muted);font-size:12px;font-weight:800}
     .lock{position:fixed;inset:0;z-index:50;background:linear-gradient(160deg,#f6ecdc,#efe4ff);display:grid;place-items:center;padding:24px} .lockbox{width:min(440px,100%);background:#fffaf3;border:1px solid rgba(117,96,76,.18);border-radius:34px;padding:24px;box-shadow:var(--shadow);text-align:center} .pass{font-size:30px;letter-spacing:.25em;text-align:center;font-weight:1000} .logo{width:48px;height:48px;border-radius:18px;background:linear-gradient(135deg,#2d211b,#7c4dff);display:grid;place-items:center;color:white;font-weight:1000} .topline{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
-    .counter{display:flex;gap:8px;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:18px;padding:10px;background:#fffdf8} .counter span{font-weight:900} .step{display:flex;align-items:center;gap:8px} .step button{width:36px;height:36px;border-radius:12px;background:#efe4d7;font-weight:1000;color:#3b2b23} .num{min-width:24px;text-align:center;font-weight:1000}
-    .log-item{border:1px solid var(--line);background:#fffdf8;border-radius:20px;padding:12px;margin:10px 0} .promptbox{white-space:pre-wrap;font:12px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;max-height:220px;overflow:auto;background:#201914;color:#fff8ed;border-radius:18px;padding:14px} .toast{position:fixed;left:50%;top:14px;transform:translateX(-50%);background:#201914;color:white;border-radius:999px;padding:10px 14px;box-shadow:0 16px 40px rgba(0,0,0,.18);z-index:80;font-weight:900;font-size:14px}
+    .counter{display:flex;gap:8px;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:18px;padding:10px;background:#fffdf8} .counter span{font-weight:900} .step{display:flex;align-items:center;gap:8px} .step button{width:40px;height:40px;border-radius:14px;background:#efe4d7;font-weight:1000;color:#3b2b23;font-size:20px} .step button:active{transform:scale(.96)} .num{min-width:30px;text-align:center;font-weight:1000;font-size:20px}
+    .log-item{border:1px solid var(--line);background:#fffdf8;border-radius:20px;padding:12px;margin:10px 0}.mini-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.mini-actions .btn{padding:9px 11px;border-radius:14px;font-size:13px}.promptbox{white-space:pre-wrap;font:12px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;max-height:220px;overflow:auto;background:#201914;color:#fff8ed;border-radius:18px;padding:14px} .toast{position:fixed;left:50%;top:14px;transform:translateX(-50%);background:#201914;color:white;border-radius:999px;padding:10px 14px;box-shadow:0 16px 40px rgba(0,0,0,.18);z-index:80;font-weight:900;font-size:14px}
   </style>
 </head>
 <body>
@@ -57,7 +57,7 @@
       <div id="counters" class="grid two" style="margin-top:14px"></div>
       <div class="grid two" style="margin-top:12px"><div><label>Pushed by feeling</label><input id="feeling" type="number" min="0" value="0" /></div><div><label>Pulled by situation</label><input id="situation" type="number" min="0" value="0" /></div></div>
       <label>Notes</label><textarea id="notes" placeholder="What happened? What helped? What should you try next time?"></textarea>
-      <div class="actions"><button class="btn green" id="saveLog">Save day</button><button class="btn secondary" id="clearForm">Clear</button></div><p id="saveStatus" class="status">Autosave saves each change instantly.</p>
+      <div class="actions"><button class="btn green" id="saveLog">Save day</button><button class="btn secondary" id="undoChange">Undo last change</button><button class="btn secondary" id="clearForm">Clear</button></div><p id="saveStatus" class="status">Autosave saves each change instantly.</p>
     </section>
 
     <section class="card soft">
@@ -69,7 +69,7 @@
   </main>
 <script>
 const STORE = 'dimitra-iqos-log-v4';
-const API = location.hostname.endsWith('github.io') ? 'https://dimitra-iqos-log.loca.lt/api/vault' : './api/vault';
+const API = location.hostname.endsWith('github.io') ? 'https://dimitra-iqos-save.loca.lt/api/vault' : './api/vault';
 const SEED = {"salt": "ZGltaXRyYS1pcW9zLWxvZy1zZWVkLXYz", "iv": "HFlGlDE3MxBTO1WX", "ct": "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", "iterations": 260000, "hash": "SHA-256"};
 let state = null, key = null, seedState = null, clientAuth = '', autosaveTimer = null, lastSavedDraft = '';
 let syncReady = false, applyingRemote = false;
@@ -91,18 +91,45 @@ async function load(){ const localRaw=localStorage.getItem(STORE); let localStat
   else if(localState){ state=localState; migrate(); const vault=await encryptState(); await pushServerVault(vault, 'local-newer'); }
   else { state = JSON.parse(JSON.stringify(seedState)); migrate(); await save('first-save'); }
 }
-function migrateObject(obj){ if(obj.profile) obj.profile.name='Dimitra'; if(!Array.isArray(obj.logs)) obj.logs=[]; if(!obj.updatedAt) obj.updatedAt=new Date().toISOString(); }
+function migrateObject(obj){ if(obj.profile) obj.profile.name='Dimitra'; if(!Array.isArray(obj.logs)) obj.logs=[]; if(!Array.isArray(obj.undoStack)) obj.undoStack=[]; if(!obj.updatedAt) obj.updatedAt=new Date().toISOString(); }
 function migrate(){ migrateObject(state); }
 function updateSyncStatus(msg){ const el=$('#syncStatus'); if(el) el.textContent=msg; }
-async function unlock(){ const pass=$('#passcode').value.trim(); if(!pass) return; try{ key=await derive(pass); clientAuth=await passAuth(pass); seedState=await decryptSeed(key); await load(); $('#lock').classList.add('hidden'); $('#app').classList.remove('hidden'); $('#logDate').value = new Date().toISOString().slice(0,10); render(); bindAutosave(); }catch(e){ $('#lockStatus').textContent='Wrong passcode'; $('#lockStatus').className='status bad'; } }
+async function unlock(){ const pass=$('#passcode').value.trim(); if(!pass) return; try{ key=await derive(pass); clientAuth=await passAuth(pass); seedState=await decryptSeed(key); await load(); $('#lock').classList.add('hidden'); $('#app').classList.remove('hidden'); $('#logDate').value = new Date().toISOString().slice(0,10); render(); loadFormForDate($('#logDate').value); bindAutosave(); }catch(e){ $('#lockStatus').textContent='Wrong passcode'; $('#lockStatus').className='status bad'; } }
 function cssSafe(s){ return s.replace(/[^a-z0-9]/gi,'_'); }
 function countTotal(log){ return Object.values(log.counts||{}).reduce((a,b)=>a+(Number(b)||0),0); }
 function topTrigger(logs=state.logs){ const totals={}; logs.forEach(l=>Object.entries(l.counts||{}).forEach(([k,v])=>totals[k]=(totals[k]||0)+(Number(v)||0))); const entries=Object.entries(totals).sort((a,b)=>b[1]-a[1]); return entries[0]&&entries[0][1]>0?entries[0][0]:'—'; }
 function escapeHtml(s){ return String(s ?? '').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
-function renderCounters(){ $('#counters').innerHTML=state.categories.map(cat=>`<div class="counter"><span>${escapeHtml(cat)}</span><div class="step"><button data-step="${escapeHtml(cat)}" data-delta="-1">−</button><span class="num" id="num-${cssSafe(cat)}">0</span><button data-step="${escapeHtml(cat)}" data-delta="1">+</button></div></div>`).join(''); $$('[data-step]').forEach(b=>b.onclick=()=>{ const id='#num-'+cssSafe(b.dataset.step); $(id).textContent=Math.max(0, Number($(id).textContent||0)+Number(b.dataset.delta)); scheduleAutosave('counter'); }); }
+function clampNumber(value){ return Math.max(0, Math.floor(Number(value)||0)); }
+function setSaveStatus(text, ok=false){ $('#saveStatus').textContent=text; $('#saveStatus').className=ok?'status ok':'status'; }
+function cloneLogs(){ return JSON.parse(JSON.stringify(state.logs||[])); }
+function rememberUndo(label='change'){ if(!state) return; state.undoStack=state.undoStack||[]; state.undoStack.push({label,time:new Date().toISOString(),logs:cloneLogs()}); if(state.undoStack.length>20) state.undoStack.shift(); }
+function renderCounters(){
+  const wanted=state.categories.join('|');
+  if($('#counters').dataset.categories!==wanted){
+    $('#counters').dataset.categories=wanted;
+    $('#counters').innerHTML=state.categories.map(cat=>`<div class="counter"><span>${escapeHtml(cat)}</span><div class="step"><button type="button" aria-label="Remove one ${escapeHtml(cat)}" data-step="${escapeHtml(cat)}" data-delta="-1">−</button><span class="num" id="num-${cssSafe(cat)}">0</span><button type="button" aria-label="Add one ${escapeHtml(cat)}" data-step="${escapeHtml(cat)}" data-delta="1">+</button></div></div>`).join('');
+    $$('[data-step]').forEach(b=>b.onclick=()=>{ const id='#num-'+cssSafe(b.dataset.step); const next=clampNumber(Number($(id).textContent||0)+Number(b.dataset.delta)); $(id).textContent=next; setSaveStatus('Autosaving…'); scheduleAutosave('counter'); });
+  }
+}
+function setFormLog(log){
+  renderCounters();
+  const safeLog = log || {counts:{}, feeling:0, situation:0, notes:''};
+  state.categories.forEach(cat=>{ const el=$('#num-'+cssSafe(cat)); if(el) el.textContent=clampNumber(safeLog.counts?.[cat]||0); });
+  $('#feeling').value=clampNumber(safeLog.feeling||0);
+  $('#situation').value=clampNumber(safeLog.situation||0);
+  const notes=String(safeLog.notes||'');
+  const quickMatch=notes.match(/(?:^|\n)Quick note: ([\s\S]*)$/);
+  $('#quickNote').value=quickMatch?quickMatch[1].trim():'';
+  $('#notes').value=quickMatch?notes.replace(/\n?Quick note: [\s\S]*$/,'').trim():notes;
+  lastSavedDraft=JSON.stringify(currentDraftLog());
+}
+function loadFormForDate(date){ const existing=state.logs.find(l=>l.date===date); applyingRemote=true; setFormLog(existing); applyingRemote=false; setSaveStatus(existing?'Loaded this day. + and − will update it instantly.':'New day. Tap + and it autosaves instantly.'); }
 function render(){ if(!state) return; renderCounters(); const today=$('#logDate').value || new Date().toISOString().slice(0,10); const todayLog=state.logs.find(l=>l.date===today); $('#todayTotal').textContent=todayLog?countTotal(todayLog):0; $('#weekTotal').textContent=state.logs.reduce((a,l)=>a+countTotal(l),0); $('#topTrigger').textContent=topTrigger(); renderLogs(); renderPrompt(); }
-function renderLogs(){ const logs=state.logs.slice().sort((a,b)=>b.date.localeCompare(a.date)); $('#logList').innerHTML=logs.length?logs.map(l=>`<div class="log-item"><div class="topline"><b>${escapeHtml(l.date)} · ${countTotal(l)} total</b><button class="btn danger" onclick="deleteLog('${l.date}')">Delete</button></div><div class="small">Top: ${escapeHtml(topTrigger([l]))} · Feeling ${l.feeling||0} · Situation ${l.situation||0}</div><div class="small">${escapeHtml(l.notes||'')}</div></div>`).join(''):'<div class="small">No logs yet.</div>'; }
-window.deleteLog=async date=>{ state.logs=state.logs.filter(l=>l.date!==date); await save('delete-log'); toast('Deleted'); };
+function renderLogs(){ const logs=state.logs.slice().sort((a,b)=>b.date.localeCompare(a.date)); $('#logList').innerHTML=logs.length?logs.map(l=>`<div class="log-item"><div class="topline"><b>${escapeHtml(l.date)} · ${countTotal(l)} total</b><button class="btn secondary" onclick="editLog('${l.date}')">Edit</button></div><div class="small">Top: ${escapeHtml(topTrigger([l]))} · Feeling ${l.feeling||0} · Situation ${l.situation||0}</div><div class="small">${escapeHtml(l.notes||'')}</div><div class="mini-actions"><button class="btn secondary" onclick="adjustLogTotal('${l.date}',-1)">Undo 1</button><button class="btn secondary" onclick="adjustLogTotal('${l.date}',1)">Add 1</button><button class="btn danger" onclick="deleteLog('${l.date}')">Delete day</button></div></div>`).join(''):'<div class="small">No logs yet.</div>'; }
+window.editLog=date=>{ $('#logDate').value=date; loadFormForDate(date); window.scrollTo({top:0,behavior:'smooth'}); toast('Loaded for editing'); };
+window.adjustLogTotal=async(date, delta)=>{ const log=state.logs.find(l=>l.date===date); if(!log) return; rememberUndo(delta<0?'undo-one':'add-one'); const counts=log.counts||{}; const entries=state.categories.filter(cat=>clampNumber(counts[cat])>0); const cat = delta>0 ? (entries[0] || state.categories[0]) : entries[entries.length-1]; if(!cat) return; counts[cat]=clampNumber((counts[cat]||0)+delta); log.counts=counts; await save(delta<0?'undo-one':'add-one'); if($('#logDate').value===date) setFormLog(log); toast(delta<0?'Undid 1':'Added 1'); };
+window.deleteLog=async date=>{ if(!confirm('Delete this day? You can undo right after.')) return; rememberUndo('delete-day'); state.logs=state.logs.filter(l=>l.date!==date); await save('delete-log'); if($('#logDate').value===date) setFormLog(null); toast('Deleted. Undo is available.'); };
+window.undoLastChange=async()=>{ const last=(state.undoStack||[]).pop(); if(!last){ toast('Nothing to undo'); return; } state.logs=last.logs; await save('undo'); loadFormForDate($('#logDate').value || new Date().toISOString().slice(0,10)); toast('Undone'); };
 function buildPrompt(){ const logs=state.logs.slice().sort((a,b)=>a.date.localeCompare(b.date)); const logText=logs.map(l=>`${l.date} — total ${countTotal(l)}; top trigger ${topTrigger([l])}; feeling-pushed ${l.feeling||0}; situation-pulled ${l.situation||0}; counts ${JSON.stringify(l.counts)}; notes: ${l.notes||''}`).join('\n'); return `You are helping Dimitra quit IQOS/smoking in a warm, practical, non-alarming way.
 
 Language: ${state.profile.language}
@@ -121,13 +148,27 @@ function renderPrompt(){ const preview=$('#promptPreview'); if(preview) preview.
 async function copyPrompt(){ const prompt=buildPrompt(); try{ await navigator.clipboard.writeText(prompt); }catch(e){ const ta=document.createElement('textarea'); ta.value=prompt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); } }
 async function copyAndOpen(){ await copyPrompt(); $('#claudeStatus').textContent='Copied. Claude is opening.'; $('#claudeStatus').className='status ok'; window.open('https://claude.ai/new','_blank','noopener'); }
 
-function currentDraftLog(){ const counts={}; if(!state) return null; state.categories.forEach(cat=>{ const el=$('#num-'+cssSafe(cat)); counts[cat]=Number(el?.textContent||0); }); const date=$('#logDate').value || new Date().toISOString().slice(0,10); const quick=$('#quickNote').value.trim(); const raw=$('#notes').value.trim(); const notes=[raw, quick?`Quick note: ${quick}`:''].filter(Boolean).join('\\n'); return {date, counts, feeling:Number($('#feeling').value||0), situation:Number($('#situation').value||0), notes}; }
+function currentDraftLog(){ const counts={}; if(!state) return null; state.categories.forEach(cat=>{ const el=$('#num-'+cssSafe(cat)); counts[cat]=clampNumber(el?.textContent||0); }); const date=$('#logDate').value || new Date().toISOString().slice(0,10); const quick=$('#quickNote').value.trim(); const raw=$('#notes').value.trim(); const notes=[raw, quick?`Quick note: ${quick}`:''].filter(Boolean).join('\\n'); return {date, counts, feeling:clampNumber($('#feeling').value||0), situation:clampNumber($('#situation').value||0), notes}; }
 function draftHasContent(log){ return countTotal(log)>0 || log.feeling>0 || log.situation>0 || Boolean(log.notes.trim()); }
-async function autosaveDraft(reason='autosave'){ if(applyingRemote || !state || !key) return; const log=currentDraftLog(); if(!log || !draftHasContent(log)) return; const signature=JSON.stringify(log); if(signature===lastSavedDraft) return; state.logs=state.logs.filter(l=>l.date!==log.date); state.logs.push(log); lastSavedDraft=signature; $('#saveStatus').textContent='Autosaving…'; $('#saveStatus').className='status'; await save(reason); $('#saveStatus').textContent='Autosaved just now'; $('#saveStatus').className='status ok'; }
-function scheduleAutosave(reason='autosave'){ clearTimeout(autosaveTimer); autosaveTimer=setTimeout(()=>autosaveDraft(reason), 450); }
-function bindAutosave(){ ['logDate','quickNote','feeling','situation','notes'].forEach(id=>{ const el=$('#'+id); if(el) el.addEventListener('input',()=>scheduleAutosave(id)); }); }
+async function autosaveDraft(reason='autosave'){
+  if(applyingRemote || !state || !key) return;
+  const log=currentDraftLog(); if(!log) return;
+  const signature=JSON.stringify(log); if(signature===lastSavedDraft) return;
+  const existing=state.logs.find(l=>l.date===log.date);
+  if(!draftHasContent(log) && !existing) return;
+  rememberUndo(reason);
+  state.logs=state.logs.filter(l=>l.date!==log.date);
+  if(draftHasContent(log)) state.logs.push(log);
+  lastSavedDraft=signature;
+  setSaveStatus('Autosaving…');
+  await save(reason);
+  setSaveStatus('Autosaved. Total is updated. Undo is available.', true);
+}
+function scheduleAutosave(reason='autosave'){ clearTimeout(autosaveTimer); autosaveTimer=setTimeout(()=>autosaveDraft(reason), 300); }
+function bindAutosave(){ ['quickNote','feeling','situation','notes'].forEach(id=>{ const el=$('#'+id); if(el) el.addEventListener('input',()=>scheduleAutosave(id)); }); $('#logDate').addEventListener('change', e=>loadFormForDate(e.target.value)); }
 $('#unlockBtn').onclick=unlock; $('#passcode').addEventListener('keydown', e=>{ if(e.key==='Enter') unlock(); });
 $('#saveLog').onclick=async()=>{ await autosaveDraft('button-save'); $('#saveStatus').textContent='Saved'; $('#saveStatus').className='status ok'; toast('Saved'); };
+$('#undoChange').onclick=()=>window.undoLastChange();
 $('#clearForm').onclick=()=>{ state.categories.forEach(cat=>$('#num-'+cssSafe(cat)).textContent='0'); $('#feeling').value=0; $('#situation').value=0; $('#quickNote').value=''; $('#notes').value=''; $('#saveStatus').textContent='Cleared. Add a number and it will autosave.'; $('#saveStatus').className='status'; };
 $('#copyOpenClaude').onclick=copyAndOpen; $('#copyOnly').onclick=async()=>{ await copyPrompt(); $('#claudeStatus').textContent='Copied.'; $('#claudeStatus').className='status ok'; toast('Copied'); };
 $('#exportData').onclick=()=>{ const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='dimitra-iqos-log-backup.json'; a.click(); URL.revokeObjectURL(a.href); };
