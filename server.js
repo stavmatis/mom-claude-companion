@@ -11,9 +11,11 @@ const AUTH_PATH = path.join(DATA_DIR, 'auth.hash');
 const PORT = Number(process.env.PORT || 8877);
 const ALLOWED_ORIGINS = new Set([
   'https://stavmatis.github.io',
+  'https://health.stavrosmavrommatis.com',
   'https://dimitra-iqos-log.loca.lt',
   'http://127.0.0.1:8877'
 ]);
+const PUBLIC_PREFIX = '/dimitra-iqos';
 
 const TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -126,9 +128,16 @@ function staticPath(urlPath) {
   return full;
 }
 
+function appPath(pathname) {
+  if (pathname === PUBLIC_PREFIX) return '/';
+  if (pathname.startsWith(`${PUBLIC_PREFIX}/`)) return pathname.slice(PUBLIC_PREFIX.length) || '/';
+  return pathname;
+}
+
 const server = http.createServer(async (req, res) => {
   try {
     const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+    const pathname = appPath(url.pathname);
 
     if (req.method === 'OPTIONS') {
       res.writeHead(204, {
@@ -138,18 +147,18 @@ const server = http.createServer(async (req, res) => {
       return res.end();
     }
 
-    if (url.pathname === '/health') {
+    if (pathname === '/health') {
       return send(req, res, 200, { ok: true, service: 'dimitra-iqos-log', hasSave: fs.existsSync(VAULT_PATH) });
     }
 
-    if (url.pathname === '/api/vault' && req.method === 'GET') {
+    if (pathname === '/api/vault' && req.method === 'GET') {
       if (!checkVaultAuth(req, url.searchParams.get('auth'))) return send(req, res, 401, { error: 'unauthorized' });
       if (!fs.existsSync(VAULT_PATH)) return send(req, res, 404, { error: 'no_save_yet' });
       res.writeHead(200, { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', 'x-content-type-options': 'nosniff', ...corsHeaders(req) });
       return fs.createReadStream(VAULT_PATH).pipe(res);
     }
 
-    if (url.pathname === '/api/vault' && req.method === 'PUT') {
+    if (pathname === '/api/vault' && req.method === 'PUT') {
       const payload = JSON.parse(await readBody(req));
       if (!checkVaultAuth(req, payload.auth)) return send(req, res, 401, { error: 'unauthorized' });
       if (!validVault(payload)) return send(req, res, 400, { error: 'invalid_vault' });
@@ -157,10 +166,10 @@ const server = http.createServer(async (req, res) => {
       return send(req, res, 200, { ok: true, updatedAt: saved.updatedAt });
     }
 
-    if (url.pathname.startsWith('/api/')) return send(req, res, 404, { error: 'not_found' });
+    if (pathname.startsWith('/api/')) return send(req, res, 404, { error: 'not_found' });
 
     if (req.method !== 'GET' && req.method !== 'HEAD') return send(req, res, 405, 'Method not allowed', 'text/plain; charset=utf-8');
-    const full = staticPath(url.pathname);
+    const full = staticPath(pathname);
     if (!full || !fs.existsSync(full) || fs.statSync(full).isDirectory()) return send(req, res, 404, 'Not found', 'text/plain; charset=utf-8');
     const ext = path.extname(full);
     res.writeHead(200, {

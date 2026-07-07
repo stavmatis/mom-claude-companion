@@ -3,8 +3,8 @@ const path = require('path');
 
 const html = fs.readFileSync(path.join(__dirname, '..', 'index.html'), 'utf8');
 const mustContain = [
-  'Updated by Stavros: autosave is now ON.',
-  'https://dimitra-iqos-save.loca.lt/api/vault',
+  'Autosave is ON.',
+  'https://health.stavrosmavrommatis.com/dimitra-iqos/api/vault',
   'function scheduleAutosave',
   'fetchServerVault',
   'pushServerVault',
@@ -12,7 +12,12 @@ const mustContain = [
   'Undo last change',
   'function clampNumber',
   'window.adjustLogTotal',
-  'window.undoLastChange'
+  'window.undoLastChange',
+  'Tap <b>End day</b> before bed',
+  'function businessDate',
+  'async function endDay',
+  'function startDayWatcher',
+  'autoStartOpenDay()'
 ];
 
 const missing = mustContain.filter(s => !html.includes(s));
